@@ -1,7 +1,15 @@
-provider "aws" {
-  region  = var.aws_region
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "5.31.0"
+    }
+  }
 }
 
+provider "aws" {
+  region = "us-east-1"
+}
 # ------- Random numbers intended to be used as unique identifiers for resources -------
 resource "random_id" "RANDOM_ID" {
   byte_length = "2"
