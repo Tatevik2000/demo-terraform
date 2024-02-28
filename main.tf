@@ -7,9 +7,6 @@ terraform {
   }
 }
 
-provider "aws" {
-  region = "us-east-1"
-}
 # ------- Random numbers intended to be used as unique identifiers for resources -------
 resource "random_id" "RANDOM_ID" {
   byte_length = "2"
