@@ -312,51 +312,7 @@ module "codebuild_client" {
   server_alb_url         = module.alb_server.dns_alb
 }
 
-# ------- Creating the server CodeDeploy project -------
-module "codedeploy_server" {
-  source          = "./Modules/CodeDeploy"
-  name            = "Deploy-${var.environment_name}-server"
-  ecs_cluster     = module.ecs_cluster.ecs_cluster_name
-  ecs_service     = module.ecs_service_server.ecs_service_name
-  alb_listener    = module.alb_server.arn_listener
-  tg_blue         = module.target_group_server_blue.tg_name
-  tg_green        = module.target_group_server_green.tg_name
-  sns_topic_arn   = module.sns.sns_arn
-  codedeploy_role = module.codedeploy_role.arn_role_codedeploy
-}
 
-# ------- Creating the client CodeDeploy project -------
-module "codedeploy_client" {
-  source          = "./Modules/CodeDeploy"
-  name            = "Deploy-${var.environment_name}-client"
-  ecs_cluster     = module.ecs_cluster.ecs_cluster_name
-  ecs_service     = module.ecs_service_client.ecs_service_name
-  alb_listener    = module.alb_client.arn_listener
-  tg_blue         = module.target_group_client_blue.tg_name
-  tg_green        = module.target_group_client_green.tg_name
-  sns_topic_arn   = module.sns.sns_arn
-  codedeploy_role = module.codedeploy_role.arn_role_codedeploy
-}
-
-# ------- Creating CodePipeline -------
-module "codepipeline" {
-  source                   = "./Modules/CodePipeline"
-  name                     = "pipeline-${var.environment_name}"
-  pipe_role                = module.devops_role.arn_role
-  s3_bucket                = module.s3_codepipeline.s3_bucket_id
-  github_token             = var.github_token
-  repo_owner               = var.repository_owner
-  repo_name                = var.repository_name
-  branch                   = var.repository_branch
-  codebuild_project_server = module.codebuild_server.project_id
-  codebuild_project_client = module.codebuild_client.project_id
-  app_name_server          = module.codedeploy_server.application_name
-  app_name_client          = module.codedeploy_client.application_name
-  deployment_group_server  = module.codedeploy_server.deployment_group_name
-  deployment_group_client  = module.codedeploy_client.deployment_group_name
-
-  depends_on = [module.policy_devops_role]
-}
 
 # ------- Creating Bucket to store assets accessed by the Back-end -------
 module "s3_assets" {
