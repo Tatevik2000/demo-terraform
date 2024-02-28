@@ -1,22 +1,14 @@
-# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-# SPDX-License-Identifier: MIT-0
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "5.31.0"
+    }
+  }
+}
 
-/*===========================
-          Root file
-============================*/
-
-# ------- Providers -------
 provider "aws" {
-  profile = var.aws_profile
   region  = var.aws_region
-
-  # provider level tags - yet inconsistent when executing 
-  # default_tags {
-  #   tags = {
-  #     Created_by = "Terraform"
-  #     Project    = "AWS_demo_fullstack_devops"
-  #   }
-  # }
 }
 
 # ------- Random numbers intended to be used as unique identifiers for resources -------
