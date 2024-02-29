@@ -194,6 +194,8 @@ module "ecs_service_server" {
   arn_task_definition = module.ecs_taks_definition_server.arn_task_definition
   subnets_id          = [module.vpc.private_subnets_server[0], module.vpc.private_subnets_server[1]]
   container_port      = var.port_app_server
+  container_memory    = "512"
+  container_cpu       = 256
 }
 
 # ------- Creating ECS Service client -------
@@ -208,6 +210,8 @@ module "ecs_service_client" {
   arn_task_definition = module.ecs_taks_definition_client.arn_task_definition
   subnets_id          = [module.vpc.private_subnets_client[0], module.vpc.private_subnets_client[1]]
   container_port      = var.port_app_client
+  container_memory    = "512"
+  container_cpu       = 256
 }
 
 # ------- Creating ECS Autoscaling policies for the server application -------
