@@ -1,6 +1,3 @@
-# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-# SPDX-License-Identifier: MIT-0
-
 terraform {
   required_version = ">= 0.13"
   required_providers {
@@ -11,5 +8,5 @@ terraform {
   }
 }
 provider "aws" {
-  region = var.region  # Specify your desired AWS region here
+  region = var.aws_region
 }
