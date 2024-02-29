@@ -124,7 +124,7 @@ module "ecs_role_policy" {
 }
 
 # ------- Creating client ECR Repository to store Docker Images -------
-module "ecr_client" {
+module "ecr" {
   source = "./Modules/ECR"
   name   = "demo"
 }
@@ -138,7 +138,7 @@ module "ecs_taks_definition_server" {
   task_role_arn      = module.ecs_role.arn_role_ecs_task_role
   cpu                = 256
   memory             = "512"
-  docker_repo        = module.ecr_server.ecr_repository_url
+  docker_repo        = module.ecr.ecr_repository_url
   region             = var.aws_region
   container_port     = var.port_app_server
 }
@@ -152,7 +152,7 @@ module "ecs_taks_definition_client" {
   task_role_arn      = module.ecs_role.arn_role_ecs_task_role
   cpu                = 256
   memory             = "512"
-  docker_repo        = module.ecr_client.ecr_repository_url
+  docker_repo        = module.ecr.ecr_repository_url
   region             = var.aws_region
   container_port     = var.port_app_client
 }
