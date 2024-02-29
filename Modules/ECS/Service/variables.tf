@@ -1,3 +1,38 @@
+variable "name" {  
+  description = "The name of the ECS task definition"  
+  type        = string  
+}  
+  
+variable "cpu" {  
+  description = "The number of CPU units used by the task"  
+  type        = string  
+}  
+  
+variable "memory" {  
+  description = "The amount of memory used by the task (in MiB)"  
+  type        = string  
+}  
+  
+variable "execution_role_arn" {  
+  description = "The ARN of the role that the ECS tasks can assume"  
+  type        = string  
+}  
+  
+variable "task_role_arn" {  
+  description = "The ARN of the role that the ECS task can assume"  
+  type        = string  
+}  
+  
+variable "container_name" {  
+  description = "The name of the container in the task definition"  
+  type        = string  
+}  
+  
+variable "docker_image_url" {  
+  description = "The URL of the Docker image for the container"  
+  type        = string  
+}  
+  
 variable "container_cpu" {  
   description = "The number of CPU units used by the container"  
   type        = number  
@@ -8,43 +43,12 @@ variable "container_memory" {
   type        = number  
 }  
   
-variable "name" {
-  description = "The name for the ecs service"
-  type        = string
-}
-
-variable "desired_tasks" {
-  description = "The minumum number of tasks to run in the service"
-  type        = string
-}
-
-variable "arn_security_group" {
-  description = "ARN of the security group for the tasks"
-  type        = string
-}
-
-variable "ecs_cluster_id" {
-  description = "The ECS cluster ID in which the resources will be created"
-  type        = string
-}
-
-variable "arn_target_group" {
-  description = "The ARN of the AWS Target Group to put the ECS task"
-  type        = string
-}
-
-variable "arn_task_definition" {
-  description = "The ARN of the Task Definition to use to deploy the tasks"
-  type        = string
-}
-
-variable "subnets_id" {
-  description = "Subnet ID in which ecs will deploy the tasks"
-  type        = list(string)
-}
-
-variable "container_port" {
-  description = "The port that the container will listen request"
-  type        = string
-}
-
+variable "container_port" {  
+  description = "The port number on the container bound to the host port"  
+  type        = number  
+}  
+  
+variable "aws_region" {  
+  description = "The AWS region where the log group will be created"  
+  type        = string  
+}  
