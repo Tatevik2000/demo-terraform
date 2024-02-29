@@ -259,18 +259,6 @@ module "codedeploy_role" {
   name                   = var.iam_role_name["codedeploy"]
 }
 
-# ------- Creating an IAM Policy for role ------- 
-module "policy_devops_role" {
-  source                = "./Modules/IAM"
-  name                  = "devops-${var.environment_name}"
-  create_policy         = true
-  attach_to             = module.devops_role.name_role
-  create_devops_policy  = true
-  ecr_repositories      = [module.ecr_server.ecr_repository_arn, module.ecr_client.ecr_repository_arn]
-  code_build_projects   = [module.codebuild_client.project_arn, module.codebuild_server.project_arn]
-  code_deploy_resources = [module.codedeploy_server.application_arn, module.codedeploy_server.deployment_group_arn, module.codedeploy_client.application_arn, module.codedeploy_client.deployment_group_arn]
-}
-
 # ------- Creating a SNS topic -------
 module "sns" {
   source   = "./Modules/SNS"
