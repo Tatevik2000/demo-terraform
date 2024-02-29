@@ -194,7 +194,6 @@ module "ecs_service_server" {
   arn_task_definition = module.ecs_taks_definition_server.arn_task_definition
   subnets_id          = [module.vpc.private_subnets_server[0], module.vpc.private_subnets_server[1]]
   container_port      = var.port_app_server
-  container_name      = var.container_name["server"]
   container_cpu      = 256  
   container_memory   = 512
   docker_image_url   = "${module.ecr_repository_url}:back"
