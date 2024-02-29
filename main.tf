@@ -152,11 +152,11 @@ module "ecs_taks_definition_client" {
   container_name     = var.container_name["client"]
   execution_role_arn = module.ecs_role.arn_role
   task_role_arn      = module.ecs_role.arn_role_ecs_task_role
-  cpu                = 256
-  memory             = "512"
+  cpu                = 512
+  memory             = "1024"  
   container_port     = var.port_app_client
   container_cpu      = "512"  
-  container_memory   = ""    
+  container_memory   = "1024"    
   docker_image_url   = "${module.ecr.ecr_repository_url}:client"
   aws_region         = var.aws_region
 }
