@@ -1,5 +1,22 @@
-# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-# SPDX-License-Identifier: MIT-0
+ variable "docker_image_url" {  
+  type        = string  
+  description = "URL of the Docker image to use in the task definition."  
+}  
+  
+variable "container_cpu" {  
+  type        = number  
+  description = "The number of CPU units to allocate for the container."  
+}  
+  
+variable "container_memory" {  
+  type        = number  
+  description = "The amount of memory (in MiB) to allocate for the container."  
+}  
+  
+variable "aws_region" {  
+  type        = string  
+  description = "The AWS region where resources will be created."  
+}  
 
 variable "name" {
   description = "The name for Task Definition"
