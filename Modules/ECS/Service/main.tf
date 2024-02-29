@@ -7,8 +7,8 @@ resource "aws_ecs_service" "ecs_service" {
   launch_type                       = "FARGATE"  
   
   network_configuration {  
-    security_groups = var.security_group_ids   
-    subnets         = var.subnet_ids         
+    security_groups = [var.arn_security_group]
+    subnets         = [var.subnets_id[0], var.subnets_id[1]]        
   }  
   
   load_balancer {  
