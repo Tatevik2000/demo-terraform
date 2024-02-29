@@ -1,65 +1,54 @@
- variable "docker_image_url" {  
+variable "name" {  
+  description = "The name of the ECS task definition"  
   type        = string  
-  description = "URL of the Docker image to use in the task definition."  
+}  
+  
+variable "cpu" {  
+  description = "The number of CPU units used by the task"  
+  type        = string  
+}  
+  
+variable "memory" {  
+  description = "The amount of memory used by the task (in MiB)"  
+  type        = string  
+}  
+  
+variable "execution_role_arn" {  
+  description = "The ARN of the role that the ECS tasks can assume"  
+  type        = string  
+}  
+  
+variable "task_role_arn" {  
+  description = "The ARN of the role that the ECS task can assume"  
+  type        = string  
+}  
+  
+variable "container_name" {  
+  description = "The name of the container in the task definition"  
+  type        = string  
+}  
+  
+variable "docker_image_url" {  
+  description = "The URL of the Docker image for the container"  
+  type        = string  
 }  
   
 variable "container_cpu" {  
+  description = "The number of CPU units used by the container"  
   type        = number  
-  description = "The number of CPU units to allocate for the container."  
 }  
   
 variable "container_memory" {  
+  description = "The amount of memory used by the container (in MiB)"  
   type        = number  
-  description = "The amount of memory (in MiB) to allocate for the container."  
+}  
+  
+variable "container_port" {  
+  description = "The port number on the container"  
+  type        = number  
 }  
   
 variable "aws_region" {  
+  description = "The AWS region where the log group will be created"  
   type        = string  
-  description = "The AWS region where resources will be created."  
 }  
-
-variable "name" {
-  description = "The name for Task Definition"
-  type        = string
-}
-
-variable "container_name" {
-  description = "The name of the Container specified in the Task definition"
-  type        = string
-}
-
-variable "execution_role_arn" {
-  description = "The IAM ARN role that the ECS task will use to call other AWS services"
-  type        = string
-}
-
-variable "task_role_arn" {
-  description = "The IAM ARN role that the ECS task will use to call other AWS services"
-  type        = string
-  default     = null
-}
-
-variable "cpu" {
-  description = "The CPU value to assign to the container, read AWS documentation for available values"
-  type        = string
-}
-
-variable "memory" {
-  description = "The MEMORY value to assign to the container, read AWS documentation to available values"
-  type        = string
-}
-
-variable "docker_repo" {
-  description = "The docker registry URL in which ecs will get the Docker image"
-  type        = string
-}
-
-variable "region" {
-  description = "AWS Region in which the resources will be deployed"
-  type        = string
-}
-
-variable "container_port" {
-  description = "The port that the container will use to listen to requests"
-  type        = number
-}
