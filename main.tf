@@ -8,7 +8,7 @@ resource "random_id" "RANDOM_ID" {
 data "aws_caller_identity" "id_current_account" {}
 
 # ------- Networking -------
-module "networking" {
+module "vpc" {
   source = "./Modules/Networking"
   cidr   = ["10.120.0.0/16"]
   name   = var.environment_name
