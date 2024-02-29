@@ -1,8 +1,3 @@
-variable "docker_image_url" {  
-  description = "The full URL of the Docker image in the ECR repository"  
-  type        = string  
-}  
-  
 variable "container_cpu" {  
   description = "The number of CPU units used by the container"  
   type        = number  
