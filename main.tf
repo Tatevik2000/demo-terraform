@@ -139,7 +139,6 @@ module "ecs_taks_definition_server" {
   cpu                = 256
   memory             = "512"
   docker_repo        = "${module.ecr.ecr_repository_url}:back"
-  region             = var.aws_region
   container_port     = var.port_app_server
 }
 
@@ -153,7 +152,6 @@ module "ecs_taks_definition_client" {
   cpu                = 256
   memory             = "512"
   docker_repo        = "${module.ecr.ecr_repository_url}:front"
-  region             = var.aws_region
   container_port     = var.port_app_client
 }
 
