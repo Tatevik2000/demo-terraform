@@ -205,7 +205,7 @@ module "ecs_service_server" {
   docker_image_url    = module.ecr.ecr_repository_url 
   cpu                 = "256" 
   memory              = "512" 
-  container_name      = "${var.environment_name}-server" 
+  container_name      = var.container_name["server"] 
   aws_region          = var.aws_region 
 }
 
@@ -228,7 +228,7 @@ module "ecs_service_client" {
   docker_image_url    = module.ecr.ecr_repository_url
   cpu                 = "256" 
   memory              = "512" 
-  container_name      = "${var.environment_name}-client" 
+  container_name      = var.container_name["client"] 
   aws_region          = var.aws_region 
 }
 
