@@ -1,6 +1,18 @@
-# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-# SPDX-License-Identifier: MIT-0
-
+variable "docker_image_url" {  
+  description = "The full URL of the Docker image in the ECR repository"  
+  type        = string  
+}  
+  
+variable "container_cpu" {  
+  description = "The number of CPU units used by the container"  
+  type        = number  
+}  
+  
+variable "container_memory" {  
+  description = "The amount of memory used by the container (in MiB)"  
+  type        = number  
+}  
+  
 variable "name" {
   description = "The name for the ecs service"
   type        = string
@@ -41,7 +53,3 @@ variable "container_port" {
   type        = string
 }
 
-variable "container_name" {
-  description = "The name of the container"
-  type        = string
-}
