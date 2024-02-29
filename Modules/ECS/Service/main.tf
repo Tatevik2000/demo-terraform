@@ -6,9 +6,9 @@ resource "aws_ecs_service" "ecs_service" {
   health_check_grace_period_seconds = 60 
   launch_type                       = "FARGATE"  
   
-  network_configuration {  
-    security_groups = [var.arn_security_group]
-    subnets         = [var.subnets_id[0], var.subnets_id[1]]        
+  network_configuration {      
+    security_groups = var.security_group_ids   
+    subnets         = var.subnet_ids           
   }  
   
   load_balancer {  
