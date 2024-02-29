@@ -123,17 +123,12 @@ module "ecs_role_policy" {
   attach_to     = module.ecs_role.name_role
 }
 
-# ------- Creating server ECR Repository to store Docker Images -------
-module "ecr_server" {
-  source = "./Modules/ECR"
-  name   = "repo-server"
-}
-
 # ------- Creating client ECR Repository to store Docker Images -------
 module "ecr_client" {
   source = "./Modules/ECR"
-  name   = "repo-client"
+  name   = "demo"
 }
+
 
 # ------- Creating ECS Task Definition for the server -------
 module "ecs_taks_definition_server" {
