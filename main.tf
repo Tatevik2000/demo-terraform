@@ -138,8 +138,11 @@ module "ecs_taks_definition_server" {
   task_role_arn      = module.ecs_role.arn_role_ecs_task_role
   cpu                = 256
   memory             = "512"
-  docker_repo        = "${module.ecr.ecr_repository_url}:back"
   container_port     = var.port_app_server
+  container_cpu      = "256"  
+  container_memory   = "512"    
+  docker_image_url   = "${module.ecr.ecr_repository_url}:back"
+  aws_region         = var.aws_region
 }
 
 # ------- Creating ECS Task Definition for the client -------
@@ -151,8 +154,11 @@ module "ecs_taks_definition_client" {
   task_role_arn      = module.ecs_role.arn_role_ecs_task_role
   cpu                = 256
   memory             = "512"
-  docker_repo        = "${module.ecr.ecr_repository_url}:front"
   container_port     = var.port_app_client
+  container_cpu      = "256"  
+  container_memory   = "512"    
+  docker_image_url   = "${module.ecr.ecr_repository_url}:front
+  aws_region         = var.aws_region
 }
 
 # ------- Creating a server Security Group for ECS TASKS -------
