@@ -212,7 +212,6 @@ module "ecs_service_client" {
   arn_task_definition = module.ecs_taks_definition_client.arn_task_definition
   subnets_id          = [module.vpc.private_subnets_client[0], module.vpc.private_subnets_client[1]]
   container_port      = var.port_app_client
-  container_name      = var.container_name["client"]
   container_cpu      = 256  
   container_memory   = 512
   docker_image_url   = "${module.ecr_repository_url}:front"
