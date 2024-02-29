@@ -129,7 +129,6 @@ module "ecr_client" {
   name   = "demo"
 }
 
-
 # ------- Creating ECS Task Definition for the server -------
 module "ecs_taks_definition_server" {
   source             = "./Modules/ECS/TaskDefinition"
