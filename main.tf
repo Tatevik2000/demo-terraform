@@ -196,6 +196,13 @@ module "ecs_service_server" {
   container_port      = var.port_app_server
   container_memory    = "512"
   container_cpu       = 256
+  execution_role_arn  = module.ecs_role.execution_role_arn 
+  task_role_arn       = module.ecs_role.task_role_arn 
+  docker_image_url    = module.ecr_repository.repository_url 
+  cpu                 = "256" 
+  memory              = "512" 
+  container_name      = "${var.environment_name}-server" 
+  aws_region          = var.aws_region 
 }
 
 # ------- Creating ECS Service client -------
