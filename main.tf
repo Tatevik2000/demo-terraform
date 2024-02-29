@@ -195,6 +195,9 @@ module "ecs_service_server" {
   subnets_id          = [module.vpc.private_subnets_server[0], module.vpc.private_subnets_server[1]]
   container_port      = var.port_app_server
   container_name      = var.container_name["server"]
+  container_cpu      = 256  
+  container_memory   = 512
+  docker_image_url   = "${module.ecr_repository_url}:back"
 }
 
 # ------- Creating ECS Service client -------
