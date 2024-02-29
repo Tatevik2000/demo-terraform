@@ -136,11 +136,11 @@ module "ecs_taks_definition_server" {
   container_name     = var.container_name["server"]
   execution_role_arn = module.ecs_role.arn_role
   task_role_arn      = module.ecs_role.arn_role_ecs_task_role
-  cpu                = 256
-  memory             = "512"
+  cpu                = 512
+  memory             = "1024"
   container_port     = var.port_app_server
-  container_cpu      = "256"  
-  container_memory   = "512"    
+  container_cpu      = "512"  
+  container_memory   = "1024"    
   docker_image_url   = "${module.ecr.ecr_repository_url}:back"
   aws_region         = var.aws_region
 }
@@ -155,9 +155,9 @@ module "ecs_taks_definition_client" {
   cpu                = 256
   memory             = "512"
   container_port     = var.port_app_client
-  container_cpu      = "256"  
-  container_memory   = "512"    
-  docker_image_url   = "${module.ecr.ecr_repository_url}:front"
+  container_cpu      = "512"  
+  container_memory   = ""    
+  docker_image_url   = "${module.ecr.ecr_repository_url}:client"
   aws_region         = var.aws_region
 }
 
