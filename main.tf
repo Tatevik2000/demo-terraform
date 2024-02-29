@@ -238,66 +238,10 @@ module "ecs_autoscaling_client" {
   max_capacity = 4
 }
 
-# ------- CodePipeline -------
-
-# ------- Creating Bucket to store CodePipeline artifacts -------
-module "s3_codepipeline" {
-  source      = "./Modules/S3"
-  bucket_name = "codepipeline-${var.aws_region}-${random_id.RANDOM_ID.hex}"
-}
-
-# ------- Creating IAM roles used during the pipeline excecution -------
-module "devops_role" {
-  source             = "./Modules/IAM"
-  create_devops_role = true
-  name               = var.iam_role_name["devops"]
-}
-
-module "codedeploy_role" {
-  source                 = "./Modules/IAM"
-  create_codedeploy_role = true
-  name                   = var.iam_role_name["codedeploy"]
-}
-
 # ------- Creating a SNS topic -------
 module "sns" {
   source   = "./Modules/SNS"
   sns_name = "sns-${var.environment_name}"
-}
-
-# ------- Creating the server CodeBuild project -------
-module "codebuild_server" {
-  source                 = "./Modules/CodeBuild"
-  name                   = "codebuild-${var.environment_name}-server"
-  iam_role               = module.devops_role.arn_role
-  region                 = var.aws_region
-  account_id             = data.aws_caller_identity.id_current_account.account_id
-  ecr_repo_url           = module.ecr_server.ecr_repository_url
-  folder_path            = var.folder_path_server
-  buildspec_path         = var.buildspec_path
-  task_definition_family = module.ecs_taks_definition_server.task_definition_family
-  container_name         = var.container_name["server"]
-  service_port           = var.port_app_server
-  ecs_role               = var.iam_role_name["ecs"]
-  ecs_task_role          = var.iam_role_name["ecs_task_role"]
-  dynamodb_table_name    = module.dynamodb_table.dynamodb_table_name
-}
-
-# ------- Creating the client CodeBuild project -------
-module "codebuild_client" {
-  source                 = "./Modules/CodeBuild"
-  name                   = "codebuild-${var.environment_name}-client"
-  iam_role               = module.devops_role.arn_role
-  region                 = var.aws_region
-  account_id             = data.aws_caller_identity.id_current_account.account_id
-  ecr_repo_url           = module.ecr_client.ecr_repository_url
-  folder_path            = var.folder_path_client
-  buildspec_path         = var.buildspec_path
-  task_definition_family = module.ecs_taks_definition_client.task_definition_family
-  container_name         = var.container_name["client"]
-  service_port           = var.port_app_client
-  ecs_role               = var.iam_role_name["ecs"]
-  server_alb_url         = module.alb_server.dns_alb
 }
 
 
