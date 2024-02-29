@@ -185,7 +185,6 @@ module "ecs_service_server" {
   depends_on          = [module.alb_server]
   source              = "./Modules/ECS/Service"
   name                = "${var.environment_name}-server"
-  arn_task_definition = module.ecs_taks_definition_server.arn_task_definition
   container_port      = var.port_app_server
   container_memory    = "512"
   container_cpu       = 256
@@ -203,7 +202,6 @@ module "ecs_service_client" {
   depends_on          = [module.alb_client]
   source              = "./Modules/ECS/Service"
   name                = "${var.environment_name}-client"
-  arn_task_definition = module.ecs_taks_definition_client.arn_task_definition
   container_port      = var.port_app_client
   container_memory    = "512"
   container_cpu       = 256
