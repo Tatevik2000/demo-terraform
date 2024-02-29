@@ -191,6 +191,12 @@ module "ecs_service_server" {
   depends_on          = [module.alb_server]
   source              = "./Modules/ECS/Service"
   name                = "${var.environment_name}-server"
+  ecs_cluster_id      = module.ecs_cluster.cluster_id  
+  arn_task_definition = module.ecs_taks_definition_server.arn_task_definition  
+  security_group_ids  = module.security_group_ecs_task_server.sg_id  
+  subnet_ids          = [module.vpc.private_subnets_server[0], module.vpc.private_subnets_server[1]]
+  target_group_arn    = module.target_group_server_blue.arn_tg
+  desired_tasks       = 1
   container_port      = var.port_app_server
   container_memory    = "512"
   container_cpu       = 256
