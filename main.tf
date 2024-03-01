@@ -1,4 +1,3 @@
-/*
 # ------- Random numbers intended to be used as unique identifiers for resources -------
 resource "random_id" "RANDOM_ID" {
   byte_length = "2"
@@ -246,8 +245,6 @@ module "sns" {
   source   = "./Modules/SNS"
   sns_name = "sns-${var.environment_name}"
 }
-
-*/
 
 # ------- Creating Bucket to store assets accessed by the Back-end -------
 module "s3_assets" {
