@@ -166,7 +166,7 @@ module "security_group_ecs_task_client" {
   description     = "Controls access to the client ECS task"
   vpc_id          = module.vpc.aws_vpc
   ingress_port    = var.port_app_client
-  security_groups = [module.security_group_alb_client.sg_id]
+  security_groups = [module.security_group_alb.sg_id]
 }
 
 # ------- Creating ECS Cluster -------
@@ -177,7 +177,7 @@ module "ecs_cluster" {
 
 # ------- Creating ECS Service server -------
 module "ecs_service_server" {
-  depends_on          = [module.alb_server]
+  depends_on          = [module.alb]
   source              = "./Modules/ECS/Service"
   name                = "${var.environment_name}-server"
   ecs_cluster_id      = module.ecs_cluster.ecs_cluster_id
@@ -200,7 +200,7 @@ module "ecs_service_server" {
 
 # ------- Creating ECS Service client -------
 module "ecs_service_client" {
-  depends_on          = [module.alb_client]
+  depends_on          = [module.alb]
   source              = "./Modules/ECS/Service"
   name                = "${var.environment_name}-client"
   ecs_cluster_id      = module.ecs_cluster.ecs_cluster_id 
