@@ -84,16 +84,6 @@ resource "aws_iam_role_policy_attachment" "attachment" {
   }
 }
 
-resource "aws_iam_role_policy_attachment" "attachment2" {
-  count      = var.create_devops_policy == true ? 1 : 0
-  policy_arn = aws_iam_policy.policy_for_role[0].arn
-  role       = var.attach_to
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
 data "aws_iam_policy_document" "role_policy_ecs_task_role" {
   statement {
     sid    = "AllowS3Actions"
