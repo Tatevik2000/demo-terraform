@@ -256,7 +256,7 @@ module "ecs_service_client" {
   arn_task_definition = module.ecs_taks_definition_client.arn_task_definition
   security_group_ids  = [module.security_group_ecs_task_client.sg_id]
   subnet_ids          = [module.vpc.private_subnets_client[0], module.vpc.private_subnets_client[1]]
-  target_group_arn    = aws_lb_target_group.other_api.arn
+  target_group_arn    = aws_lb_target_group.tg_other.arn
   desired_tasks       = 1
   container_port      = var.port_app_client
   container_memory    = "512"
