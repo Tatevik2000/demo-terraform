@@ -8,8 +8,8 @@ variable "name" {
 
 variable "target_group" {
   description = "The ARN of the created target group"
-  type        = string
-  default     = ""
+  type        = list(any)
+  default     = []
 }
 
 variable "target_group_green" {
