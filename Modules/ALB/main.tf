@@ -3,7 +3,7 @@
 ===============================================================*/
 resource "aws_alb_listener" "http_listener" {  
   count             = var.create_alb ? 1 : 0  
-  load_balancer_arn = aws_alb.alb[0].id  
+  load_balancer_arn = aws_alb.id  
   port              = "80"  
   protocol          = "HTTP"  
   
