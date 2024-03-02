@@ -128,7 +128,7 @@ resource "aws_lb_listener_rule" "api_rule" {
 resource "aws_security_group" "alb_sg" {  
   name        = "alb-sg"  
   description = "ALB Security Group"  
-  vpc_id      = "module.vpc.aws_vpc" 
+  vpc_id      = module.vpc.vpc_id  
   
   ingress {  
     from_port   = 80  
@@ -142,8 +142,9 @@ resource "aws_security_group" "alb_sg" {
     to_port     = 443  
     protocol    = "tcp"  
     cidr_blocks = ["0.0.0.0/0"]  
-}
-}
+  }  
+}  
+
 
 # ------- ECS Role -------
 module "ecs_role" {
