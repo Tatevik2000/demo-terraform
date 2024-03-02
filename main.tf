@@ -81,16 +81,15 @@ module "vpc" {
     }
   }
 
-listeners = {  
-  http = {  
-    port     = 80  
-    protocol = "HTTP"  
-    default_action = {  
-      type             = "forward"  
-      target_group_key = "front"  
-    }  
-  }  
-}  
+listener = [
+    {
+      instance_port     = 80
+      instance_protocol = "HTTP"
+      lb_port           = 80
+      lb_protocol       = "HTTP"
+    }
+  ]
+  
 
    
 
