@@ -17,7 +17,7 @@ module "vpc" {
   source = "terraform-aws-modules/alb/aws"
 
   name    = "${var.environment_name}-alb" 
-  vpc_id  = "${module.vpc}"
+  vpc_id  = [module.vpc]
   subnets = [module.vpc.public_subnets[0], module.vpc.public_subnets[1]] 
   security_group_ingress_rules = {
     all_http = {
