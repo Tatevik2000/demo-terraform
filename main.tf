@@ -140,7 +140,7 @@ resource "aws_security_group" "alb_sg" {
     from_port   = 443  
     to_port     = 443  
     protocol    = "tcp"  
-    cidr_blocks
+    cidr_blocks = ["0.0.0.0/0"]  
 }
 
 # ------- ECS Role -------
