@@ -37,17 +37,6 @@ module "security_group_alb" {
   ingress_port        = 80 // Assuming HTTP traffic for both services  
 }  
 
-module "alb" {  
-  source         = "./Modules/ALB"  
-  create_alb     = true  
-  name           = "${var.environment_name}-alb"  
-  subnets        = [module.vpc.public_subnets[0], module.vpc.public_subnets[1]]  
-  security_group = module.security_group_alb.sg_id  
-  target_group_arn  = module.target_group_server_blue.arn_tg_1
-  target_group_arn_2  = module.target_group_server_blue.arn_tg_2
-    
-}
-
  module "alb" {
   source = "terraform-aws-modules/alb/aws"
 
