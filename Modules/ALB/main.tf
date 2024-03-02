@@ -44,30 +44,56 @@ resource "aws_alb_listener" "http_listener" {
     ignore_changes = [default_action]
   }
 }
-
-# ------- Target Groups for ALB -------
-resource "aws_alb_target_group" "target_group" {
-  count                = var.create_target_group == true ? 1 : 0
-  name                 = var.name
-  port                 = var.port
-  protocol             = var.protocol
-  vpc_id               = var.vpc
-  target_type          = var.tg_type
-  deregistration_delay = 5
-
-  health_check {
-    enabled             = true
-    interval            = 15
-    path                = var.health_check_path
-    port                = var.health_check_port
-    protocol            = var.protocol
-    timeout             = 10
-    healthy_threshold   = 2
-    unhealthy_threshold = 3
-    matcher             = "200"
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
+# ------- First Target Group for ALB -------  
+resource "aws_alb_target_group" "target_group_1" {  
+  count                = var.create_target_group_1 == true ? 1 : 0  
+  name                 = "${var.name}-tg-1"  
+  port                 = var.port_1  
+  protocol             = var.protocol_1  
+  vpc_id               = var.vpc  
+  target_type          = var.tg_type_1  
+  deregistration_delay = var.deregistration_delay_1  
+  
+  health_check {  
+    enabled             = true  
+    interval            = var.health_check_interval_1  
+    path                = var.health_check_path_1  
+    port                = var.health_check_port_1  
+    protocol            = var.protocol_1  
+    timeout             = var.health_check_timeout_1  
+    healthy_threshold   = var.healthy_threshold_1  
+    unhealthy_threshold = var.unhealthy_threshold_1  
+    matcher             = var.health_check_matcher_1  
+  }  
+  
+  lifecycle {  
+    create_before_destroy = true  
+  }  
+}  
+  
+# ------- Second Target Group for ALB -------  
+resource "aws_alb_target_group" "target_group_2" {  
+  count                = var.create_target_group_2 == true ? 1 : 0  
+  name                 = "${var.name}-tg-2"  
+  port                 = var.port_2  
+  protocol             = var.protocol_2  
+  vpc_id               = var.vpc  
+  target_type          = var.tg_type_2  
+  deregistration_delay = var.deregistration_delay_2  
+  
+  health_check {  
+    enabled             = true  
+    interval            = var.health_check_interval_2  
+    path                = var.health_check_path_2  
+    port                = var.health_check_port_2  
+    protocol            = var.protocol_2  
+    timeout             = var.health_check_timeout_2  
+    healthy_threshold   = var.healthy_threshold_2  
+    unhealthy_threshold = var.unhealthy_threshold_2  
+    matcher             = var.health_check_matcher_2  
+  }  
+  
+  lifecycle {  
+    create_before_destroy = true  
+  }  
+}  
