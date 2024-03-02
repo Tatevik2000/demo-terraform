@@ -1,5 +1,5 @@
 data "aws_route53_zone" "zone" {
-  name = "testofalamashxarh.link"
+  name = "var.rt_zone_name"
 } 
 
 module "acm" {
@@ -215,7 +215,7 @@ module "security_group_ecs_task_client" {
   description     = "Controls access to the client ECS task"
   vpc_id          = module.vpc.aws_vpc
   ingress_port    = var.port_app_client
-  security_groups = [module.alb.security_group_id]
+  security_groups = aws_security_group.alb_sg.id
 }
 
 # ------- Creating ECS Cluster -------
@@ -226,7 +226,7 @@ module "ecs_cluster" {
 
 # ------- Creating ECS Service server -------
 module "ecs_service_server" {
-  depends_on          = [module.alb]
+  depends_on          = [aws_lb.alb]
   source              = "./Modules/ECS/Service"
   name                = "${var.environment_name}-server"
   ecs_cluster_id      = module.ecs_cluster.ecs_cluster_id
@@ -249,7 +249,7 @@ module "ecs_service_server" {
 
 # ------- Creating ECS Service client -------
 module "ecs_service_client" {
-  depends_on          = [module.alb]
+  depends_on          = [aws_lb.alb]
   source              = "./Modules/ECS/Service"
   name                = "${var.environment_name}-client"
   ecs_cluster_id      = module.ecs_cluster.ecs_cluster_id 
