@@ -128,7 +128,7 @@ resource "aws_lb_listener_rule" "api_rule" {
 resource "aws_security_group" "alb_sg" {  
   name        = "alb-sg"  
   description = "ALB Security Group"  
-  vpc_id      = module.vpc.vpc_id  
+  vpc_id      = module.vpc.aws_vpc 
   
   ingress {  
     from_port   = 80  
