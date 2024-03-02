@@ -136,7 +136,7 @@ module "ecs_service_server" {
   arn_task_definition = module.ecs_taks_definition_server.arn_task_definition  
   security_group_ids  = [module.security_group_ecs_task_server.sg_id] 
   subnet_ids          = [module.vpc.private_subnets_server[0], module.vpc.private_subnets_server[1]]
-  target_group_arn    = module.target_group_server_blue.arn_tg
+  target_group_arn    = module.target_group_server_blue.arn_tg_1
   desired_tasks       = 1
   container_port      = var.port_app_server
   container_memory    = "512"
@@ -159,7 +159,7 @@ module "ecs_service_client" {
   arn_task_definition = module.ecs_taks_definition_client.arn_task_definition
   security_group_ids  = [module.security_group_ecs_task_client.sg_id]
   subnet_ids          = [module.vpc.private_subnets_client[0], module.vpc.private_subnets_client[1]]
-  target_group_arn    = module.target_group_server_blue.arn_tg
+  target_group_arn    = module.target_group_server_blue.arn_tg_2
   desired_tasks       = 1
   container_port      = var.port_app_client
   container_memory    = "512"
