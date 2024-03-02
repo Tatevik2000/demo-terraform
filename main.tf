@@ -1,5 +1,6 @@
 data "aws_route53_zone" "zone" {
-  name = "var.rt_zone_name"
+  name = "testofalamashxarh.link."
+  private_zone = false 
 } 
 
 module "acm" {
