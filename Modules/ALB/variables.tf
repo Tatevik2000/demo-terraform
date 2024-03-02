@@ -62,7 +62,7 @@ variable "name" {
   type        = string
 }
 
-variable "target_group" {
+variable "target_group_arn" {
   description = "The ARN of the created target group"
   type        = string
   default     = ""
