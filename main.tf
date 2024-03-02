@@ -89,9 +89,7 @@ listeners = [
       lb_protocol       = "HTTP"
     }
   ]
-  
-
-   
+    create_attachment = false
 
     target_groups = [
     {
