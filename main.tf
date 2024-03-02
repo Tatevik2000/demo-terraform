@@ -81,12 +81,27 @@ module "vpc" {
     }
   }
 
+  listeners = {
+    ex-http-https = {
+      port     = 80
+      protocol = "HTTP"
+    }
+    ex-https = {
+      port            = 443
+      protocol        = "HTTPS"
+      certificate_arn = "module.acm.acm_certificate_arn"
+
+      forward = {
+        target_group_key = "ex-instance"
+      }
+    }
+  }
     target_groups = [
     {
       name_prefix      = "front"
-      backend_protocol = "http"
-      backend_port     = 80
-      target_type      = "ip"
+      protocol         = "HTTP"
+      port             = 80
+      target_type      = "instance"
       
       health_check = {
           matcher = "200-299"
@@ -94,10 +109,10 @@ module "vpc" {
       }
     },
     {
-      name_prefix      = "back"
-      backend_protocol = "http"
-      backend_port     = 80
-      target_type      = "ip"
+      name_prefix      = "h1"
+      protocol         = "back"
+      port             = 80
+      target_type      = "instance"
       
       health_check = {
           matcher = "200-299"
