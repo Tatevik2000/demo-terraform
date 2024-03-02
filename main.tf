@@ -1,3 +1,4 @@
+/*
 data "aws_route53_zone" "zone" {
   name = "testofalamashxarh.link."
   private_zone = false 
@@ -43,7 +44,7 @@ module "acm_cloudfront" {
 resource "random_id" "RANDOM_ID" {
   byte_length = "2"
 }
-
+/*
 # ------- Account ID -------
 data "aws_caller_identity" "id_current_account" {}
 
@@ -92,7 +93,7 @@ resource "aws_lb_listener" "http_listener" {
     target_group_arn = aws_lb_target_group.tg_other.arn  
   }  
 }  
-  
+  /*
 # Create an HTTPS listener using the ACM certificate  
 resource "aws_lb_listener" "https_listener" {  
   load_balancer_arn = aws_lb.alb.arn  
@@ -106,6 +107,7 @@ resource "aws_lb_listener" "https_listener" {
     target_group_arn = aws_lb_target_group.tg_other.arn  
   }  
 }  
+*/
   
 # Create a listener rule to forward /api traffic to the tg_api target group  
 resource "aws_lb_listener_rule" "api_rule" {  
