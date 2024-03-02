@@ -39,16 +39,6 @@ module "target_group_server_green" {
   health_check_port   = var.port_app_server
 }
 
-# ------- Creating Security Group for the server ALB -------
-module "security_group_alb_server" {
-  source              = "./Modules/SecurityGroup"
-  name                = "alb-${var.environment_name}-server"
-  description         = "Controls access to the server ALB"
-  vpc_id              = module.vpc.aws_vpc
-  cidr_blocks_ingress = ["0.0.0.0/0"]
-  ingress_port        = 80
-}
-
 # ------- Creating Security Group for the client ALB -------
 module "security_group_alb" {  
   source              = "./Modules/SecurityGroup"  
