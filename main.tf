@@ -138,7 +138,7 @@ module "security_group_ecs_task_server" {
   description     = "Controls access to the server ECS task"
   vpc_id          = module.vpc.aws_vpc
   ingress_port    = var.port_app_server
-  security_groups = [module.alb.security_groups]
+  security_groups = [module.alb.security_group_id]
 }
 # ------- Creating a client Security Group for ECS TASKS -------
 module "security_group_ecs_task_client" {
