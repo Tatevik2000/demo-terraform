@@ -206,7 +206,7 @@ module "security_group_ecs_task_server" {
   description     = "Controls access to the server ECS task"
   vpc_id          = module.vpc.aws_vpc
   ingress_port    = var.port_app_server
-  security_groups = [module.alb.security_group_id]
+  security_groups = aws_security_group.alb_sg.id
 }
 # ------- Creating a client Security Group for ECS TASKS -------
 module "security_group_ecs_task_client" {
@@ -233,7 +233,7 @@ module "ecs_service_server" {
   arn_task_definition = module.ecs_taks_definition_server.arn_task_definition  
   security_group_ids  = [module.security_group_ecs_task_server.sg_id] 
   subnet_ids          = [module.vpc.private_subnets_server[0], module.vpc.private_subnets_server[1]]
-  target_group_arn    = module.alb.target_groups[0]
+  target_group_arn    = aws_lb_target_group.tg_api.arn
   desired_tasks       = 1
   container_port      = var.port_app_server
   container_memory    = "512"
@@ -256,7 +256,7 @@ module "ecs_service_client" {
   arn_task_definition = module.ecs_taks_definition_client.arn_task_definition
   security_group_ids  = [module.security_group_ecs_task_client.sg_id]
   subnet_ids          = [module.vpc.private_subnets_client[0], module.vpc.private_subnets_client[1]]
-  target_group_arn    = module.alb.target_groups[1]
+  target_group_arn    = aws_lb_target_group.other_api.arn
   desired_tasks       = 1
   container_port      = var.port_app_client
   container_memory    = "512"
