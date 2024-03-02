@@ -16,7 +16,7 @@ resource "aws_alb_listener" "http_listener" {
 # ------- ALB Listenet for HTTPS -------
 resource "aws_alb_listener" "https_listener" {
   count             = var.create_alb == true ? (var.enable_https == true ? 1 : 0) : 0
-  load_balancer_arn = aws_alb.alb[0].id
+  load_balancer_arn = aws_alb.id
   port              = "443"
   protocol          = "HTTPS"
 
