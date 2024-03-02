@@ -81,16 +81,6 @@ module "vpc" {
     }
   }
 
-listeners = [
-    {
-      instance_port     = 80
-      instance_protocol = "HTTP"
-      lb_port           = 80
-      lb_protocol       = "HTTP"
-    }
-  ]
-    create_attachment = false
-
     target_groups = [
     {
       name_prefix      = "front"
