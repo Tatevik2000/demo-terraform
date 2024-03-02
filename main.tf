@@ -142,6 +142,7 @@ resource "aws_security_group" "alb_sg" {
     protocol    = "tcp"  
     cidr_blocks = ["0.0.0.0/0"]  
 }
+}
 
 # ------- ECS Role -------
 module "ecs_role" {
