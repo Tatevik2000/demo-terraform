@@ -13,32 +13,9 @@ module "vpc" {
   name   = var.environment_name
 }
 
-# ------- Creating Target Group for the server ALB blue environment -------
-module "target_group_server_blue" {
-  source              = "./Modules/ALB"
-  create_target_group_1  = true
-  create_target_group_2 = true
-  name                = "tg-${var.environment_name}-s-b"
-  port                = 80
-  protocol            = "HTTP"
-  vpc                 = module.vpc.aws_vpc
-  tg_type             = "ip"
-  health_check_path   = "/status"
-  health_check_port   = var.port_app_server
-}
-
-# ------- Creating Security Group for the client ALB -------
-module "security_group_alb" {  
-  source              = "./Modules/SecurityGroup"  
-  name                = "alb-${var.environment_name}"  
-  description         = "Controls access to the ALB"  
-  vpc_id              = module.vpc.aws_vpc  
-  cidr_blocks_ingress = ["0.0.0.0/0"]  
-  ingress_port        = 80 // Assuming HTTP traffic for both services  
-}  
-
  module "alb" {
   source = "terraform-aws-modules/alb/aws"
+  version = "~> 8.0"
 
   name    = "${var.environment_name}-alb" 
   vpc_id  = module.vpc.id
