@@ -74,8 +74,6 @@ module "vpc" {
       }
     }
   ]
-
-  tags = "demo"
 }
 
 # ------- ECS Role -------
