@@ -55,7 +55,7 @@ module "vpc" {
 
  module "alb" {
   source = "terraform-aws-modules/alb/aws"
-
+  version = "~> 8.0"
   name    = "${var.environment_name}-alb" 
   vpc_id  = module.vpc.aws_vpc
   subnets = [module.vpc.public_subnets[0], module.vpc.public_subnets[1]] 
