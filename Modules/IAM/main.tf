@@ -1,7 +1,7 @@
 
 # ------- IAM Roles -------  
 resource "aws_iam_role" "ecs_task_excecution_role" {  
-  count              = var.create_ecs_role 
+  count              = var.create_ecs_role == true ? 1 : 0
   name               = var.name  
   assume_role_policy = data.aws_iam_policy_document.ecs_task_assume_role_policy.json  
   tags = {  
@@ -14,7 +14,7 @@ resource "aws_iam_role" "ecs_task_excecution_role" {
 }  
   
 resource "aws_iam_role" "ecs_task_role" {  
-  count              = var.create_ecs_role 
+  count              = var.create_ecs_role == true ? 1 : 0
   name               = var.name_ecs_task_role  
   assume_role_policy = data.aws_iam_policy_document.ecs_task_assume_role_policy.json  
   tags = {  
