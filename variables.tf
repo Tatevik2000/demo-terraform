@@ -1,3 +1,9 @@
+variable "rt_zone_name" {
+  description = "Name of DNS zone"
+  type        = string
+  default     = null
+}
+
 variable "aws_region" {
   description = "The AWS Region in which you want to deploy the resources"
   type        = string
