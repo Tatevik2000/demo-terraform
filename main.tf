@@ -1,47 +1,3 @@
-/*
-data "aws_route53_zone" "zone" {
-  name = "testofalamashxarh.link."
-  private_zone = false 
-} 
-
-module "acm" {
-  source  = "terraform-aws-modules/acm/aws"
-  version = "~> 4.0"
-
-  domain_name  = var.rt_zone_name
-  zone_id      = data.aws_route53_zone.zone.zone_id
-
-  subject_alternative_names = [
-    "*.${var.rt_zone_name}"
-  ]
-
-  create_certificate = var.acm_create_certificate
-  
-  tags               = var.tags
-}
-
-
-module "acm_cloudfront" {
-  source  = "terraform-aws-modules/acm/aws"
-  version = "~> 4.0"
-
-  providers = {
-    aws = aws.us-east-1
-  }
-  
-  domain_name  = var.rt_zone_name
-  zone_id      = data.aws_route53_zone.zone.zone_id
-
-  subject_alternative_names = [
-    "*.${var.rt_zone_name}",
-  ]
-
-  create_certificate = var.acm_create_certificate
-  
-  tags               = var.tags
-}
-*/
-
 resource "random_id" "RANDOM_ID" {
   byte_length = "2"
 }
@@ -73,6 +29,7 @@ resource "aws_lb_target_group" "tg_other" {
   port     = 80  
   protocol = "HTTP"  
   vpc_id   =  module.vpc.aws_vpc
+  target_type = "ip"
 }  
   
 # Create the second target group for /api traffic  
@@ -80,6 +37,7 @@ resource "aws_lb_target_group" "tg_api" {
   name     = "tg-api"  
   port     = 80  
   protocol = "HTTP"  
+  target_type = "ip"
   vpc_id   = module.vpc.aws_vpc # Replace with your actual VPC ID  
 }  
   
