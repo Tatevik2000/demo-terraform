@@ -68,11 +68,10 @@ variable "target_group_arn" {
   default     = ""
 }
 
-variable "target_group_green" {
-  description = "The ANR of the created target group"
-  type        = string
-  default     = ""
-}
+variable "target_group_arn_2" {  
+  description = "ARN of the second target group to associate with the second ALB listener"  
+  type        = string  
+} 
 
 variable "create_alb" {
   description = "Set to true to create an ALB"
