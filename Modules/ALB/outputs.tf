@@ -1,23 +1,23 @@
-output "alb_arn" {  
-  value = module.alb_module.alb_arn  
-}  
-  
-output "arn_tg" {  
-  description = "ARN of the Target Group"  
-  value       = var.create_target_group ? aws_alb_target_group.target_group[0].arn : null  
-}  
-  
-output "tg_name" {  
-  description = "Name of the Target Group"  
-  value       = var.create_target_group ? aws_alb_target_group.target_group[0].name : null  
-}  
-  
-output "arn_listener" {  
-  description = "ARN of the ALB HTTP Listener"  
-  value       = var.create_alb ? aws_alb_listener.http_listener[0].arn : null  
-}  
-  
-output "dns_alb" {  
-  description = "DNS Name of the Application Load Balancer"  
-  value = module.alb_module.alb_dns_name  
-}  
+output "arn_alb" {
+  value = (var.create_alb == true
+  ? (length(aws_alb.alb) > 0 ? aws_alb.alb[0].arn : "") : "")
+}
+output "arn_tg" {
+  value = (var.create_target_group == true
+  ? (length(aws_alb_target_group.target_group) > 0 ? aws_alb_target_group.target_group[0].arn : "") : "")
+}
+
+output "tg_name" {
+  value = (var.create_target_group == true
+  ? (length(aws_alb_target_group.target_group) > 0 ? aws_alb_target_group.target_group[0].name : "") : "")
+}
+
+output "arn_listener" {
+  value = (var.create_alb == true
+  ? (length(aws_alb_listener.http_listener) > 0 ? aws_alb_listener.http_listener[0].arn : "") : "")
+}
+
+output "dns_alb" {
+  value = (var.create_alb == true
+  ? (length(aws_alb.alb) > 0 ? aws_alb.alb[0].dns_name : "") : "")
+}
