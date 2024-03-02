@@ -1,5 +1,22 @@
-# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-# SPDX-License-Identifier: MIT-0
+variable "target_groups" {  
+  description = "List of target groups with path patterns"  
+  type = list(object({  
+    arn          : string  
+    path_pattern : string  
+  }))  
+  default = [  
+    {  
+      arn          = "" 
+      path_pattern = "/*"  
+    },  
+    {  
+      arn          = "" 
+      path_pattern = "/*"  
+    },  
+    # Add more target groups with their path patterns here...  
+  ]  
+}  
+
 
 variable "name" {
   description = "A name for the target group or ALB"
