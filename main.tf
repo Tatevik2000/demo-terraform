@@ -48,6 +48,71 @@ module "alb" {
     
 }
 
+ module "alb" {
+  source = "terraform-aws-modules/alb/aws"
+
+  name    = "${var.environment_name}-alb" 
+  vpc_id  = module.vpc.id
+  subnets = [module.vpc.public_subnets[0], module.vpc.public_subnets[1]] 
+  security_group_ingress_rules = {
+    all_http = {
+      from_port   = 80
+      to_port     = 80
+      ip_protocol = "tcp"
+      description = "HTTP web traffic"
+      cidr_ipv4   = "0.0.0.0/0"
+    }
+    all_https = {
+      from_port   = 443
+      to_port     = 443
+      ip_protocol = "tcp"
+      description = "HTTPS web traffic"
+      cidr_ipv4   = "0.0.0.0/0"
+    }
+  }
+  security_group_egress_rules = {
+    all = {
+      ip_protocol = "-1"
+      cidr_ipv4   = "10.120.0.0/16"
+    }
+  }
+
+  listeners = {
+    ex-http-https-redirect = {
+      port     = 80
+      protocol = "HTTP"
+      }
+    }
+   
+
+    target_groups = [
+    {
+      name_prefix      = "front"
+      backend_protocol = "http"
+      backend_port     = 80
+      target_type      = "ip"
+      
+      health_check = {
+          matcher = "200-299"
+          path    = "/status"
+      }
+    },
+    {
+      name_prefix      = "back"
+      backend_protocol = "http"
+      backend_port     = 80
+      target_type      = "ip"
+      
+      health_check = {
+          matcher = "200-299"
+          path    = "/status"
+      }
+    }
+  ]
+
+  tags = "demo"
+}
+
 # ------- ECS Role -------
 module "ecs_role" {
   source             = "./Modules/IAM"
