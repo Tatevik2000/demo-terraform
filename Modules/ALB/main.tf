@@ -1,22 +1,18 @@
-/*==============================================================
-      AWS Application Load Balancer + Target groups
-===============================================================*/
-resource "aws_alb_listener" "http_listener" {  
-  count             = var.create_alb ? 1 : 0  
-  load_balancer_arn = aws_alb.id  
-  port              = "80"  
-  protocol          = "HTTP"  
-  
-  default_action {  
-    type             = "forward"  
-    target_group_arn = var.default_target_group  # Set your default target group here  
-  }  
+resource "aws_alb" "alb" {
+  count              = var.create_alb == true ? 1 : 0
+  name               = "alb-${var.name}"
+  subnets            = [var.subnets[0], var.subnets[1]]
+  security_groups    = [var.security_group]
+  load_balancer_type = "application"
+  internal           = false
+  enable_http2       = true
+  idle_timeout       = 30
 }
 
 # ------- ALB Listenet for HTTPS -------
 resource "aws_alb_listener" "https_listener" {
   count             = var.create_alb == true ? (var.enable_https == true ? 1 : 0) : 0
-  load_balancer_arn = aws_alb.id
+  load_balancer_arn = aws_alb.alb[0].id
   port              = "443"
   protocol          = "HTTPS"
 
