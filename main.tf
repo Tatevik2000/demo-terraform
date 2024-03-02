@@ -51,9 +51,6 @@ module "vpc" {
   source = "./Modules/vpc"
   cidr   = ["10.120.0.0/16"]
   name   = var.environment_name
-}
-provider "aws" {  
-  region = "us-east-1" # Ensure this matches the region of your ACM certificate  
 }  
   
 # Define the ALB  
