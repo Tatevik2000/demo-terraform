@@ -109,8 +109,8 @@ module "vpc" {
       }
     },
     {
-      name_prefix      = "h1"
-      protocol         = "back"
+      name_prefix      = "back"
+      protocol         = "HTTP"
       port             = 80
       target_type      = "instance"
       
