@@ -40,10 +40,11 @@ module "acm_cloudfront" {
   
   tags               = var.tags
 }
+*/
+
 resource "random_id" "RANDOM_ID" {
   byte_length = "2"
 }
-*/
 
 # ------- Account ID -------
 data "aws_caller_identity" "id_current_account" {}
@@ -111,7 +112,7 @@ resource "aws_lb_listener" "https_listener" {
   
 # Create a listener rule to forward /api traffic to the tg_api target group  
 resource "aws_lb_listener_rule" "api_rule" {  
-  listener_arn = aws_lb_listener.https_listener.arn  
+  listener_arn = aws_lb_listener.http_listener.arn  
   priority     = 100  
   
   action {  
