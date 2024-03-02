@@ -52,74 +52,98 @@ module "vpc" {
   cidr   = ["10.120.0.0/16"]
   name   = var.environment_name
 }
-
- module "alb" {
-  source = "terraform-aws-modules/alb/aws"
-  name    = "${var.environment_name}-alb" 
-  vpc_id  = module.vpc.aws_vpc
-  subnets = [module.vpc.public_subnets[0], module.vpc.public_subnets[1]] 
-  security_group_ingress_rules = {
-    all_http = {
-      from_port   = 80
-      to_port     = 80
-      ip_protocol = "tcp"
-      description = "HTTP web traffic"
-      cidr_ipv4   = "0.0.0.0/0"
-    }
-    all_https = {
-      from_port   = 443
-      to_port     = 443
-      ip_protocol = "tcp"
-      description = "HTTPS web traffic"
-      cidr_ipv4   = "0.0.0.0/0"
-    }
-  }
-  security_group_egress_rules = {
-    all = {
-      ip_protocol = "-1"
-      cidr_ipv4   = "10.120.0.0/16"
-    }
-  }
-
-  listeners = {
-    ex-http-https = {
-      port     = 80
-      protocol = "HTTP"
-    }
-    ex-https = {
-      port            = 443
-      protocol        = "HTTPS"
-      certificate_arn = "module.acm.acm_certificate_arn"
-
-      forward = {
-        target_group_key = "ex-instance"
-      }
-    }
-  }
-    target_groups = [
-    {
-      name_prefix      = "front"
-      protocol         = "HTTP"
-      port             = 80
-      target_type      = "instance"
-      
-      health_check = {
-          matcher = "200-299"
-          path    = "/status"
-      }
-    },
-    {
-      name_prefix      = "back"
-      protocol         = "HTTP"
-      port             = 80
-      target_type      = "instance"
-      
-      health_check = {
-          matcher = "200-299"
-          path    = "/status"
-      }
-    }
-  ]
+provider "aws" {  
+  region = "us-east-1" # Ensure this matches the region of your ACM certificate  
+}  
+  
+# Define the ALB  
+resource "aws_lb" "alb" {  
+  name               = "alb-demo"  
+  internal           = false  
+  load_balancer_type = "application"  
+  security_groups    = [aws_security_group.alb_sg.id]  
+  subnets            = [module.vpc.public_subnets[0], module.vpc.public_subnets[1]]  
+  
+  enable_deletion_protection = false  
+}  
+  
+# Create the first target group for general traffic  
+resource "aws_lb_target_group" "tg_other" {  
+  name     = "tg-other"  
+  port     = 80  
+  protocol = "HTTP"  
+  vpc_id   =  module.vpc.aws_vpc
+}  
+  
+# Create the second target group for /api traffic  
+resource "aws_lb_target_group" "tg_api" {  
+  name     = "tg-api"  
+  port     = 80  
+  protocol = "HTTP"  
+  vpc_id   = module.vpc.aws_vpc # Replace with your actual VPC ID  
+}  
+  
+# Create an HTTP listener  
+resource "aws_lb_listener" "http_listener" {  
+  load_balancer_arn = aws_lb.my_alb.arn  
+  port              = 80  
+  protocol          = "HTTP"  
+  
+  default_action {  
+    type             = "forward"  
+    target_group_arn = aws_lb_target_group.tg_other.arn  
+  }  
+}  
+  
+# Create an HTTPS listener using the ACM certificate  
+resource "aws_lb_listener" "https_listener" {  
+  load_balancer_arn = aws_lb.my_alb.arn  
+  port              = 443  
+  protocol          = "HTTPS"  
+  ssl_policy        = "ELBSecurityPolicy-2016-08" # Use an appropriate SSL policy for your needs  
+  certificate_arn   = module.acm.acm_certificate_arn # Replace with your actual ACM certificate ARN  
+  
+  default_action {  
+    type             = "forward"  
+    target_group_arn = aws_lb_target_group.tg_other.arn  
+  }  
+}  
+  
+# Create a listener rule to forward /api traffic to the tg_api target group  
+resource "aws_lb_listener_rule" "api_rule" {  
+  listener_arn = aws_lb_listener.https_listener.arn  
+  priority     = 100  
+  
+  action {  
+    type             = "forward"  
+    target_group_arn = aws_lb_target_group.tg_api.arn  
+  }  
+  
+  condition {  
+    path_pattern {  
+      values = ["/api/*"]  
+    }  
+  }  
+}  
+  
+# Security group for the ALB  
+resource "aws_security_group" "alb_sg" {  
+  name        = "alb-sg"  
+  description = "ALB Security Group"  
+  vpc_id      = "module.vpc.aws_vpc" 
+  
+  ingress {  
+    from_port   = 80  
+    to_port     = 80  
+    protocol    = "tcp"  
+    cidr_blocks = ["0.0.0.0/0"]  
+  }  
+  
+  ingress {  
+    from_port   = 443  
+    to_port     = 443  
+    protocol    = "tcp"  
+    cidr_blocks
 }
 
 # ------- ECS Role -------
