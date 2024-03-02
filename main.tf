@@ -1,4 +1,44 @@
-# ------- Random numbers intended to be used as unique identifiers for resources -------
+data "aws_route53_zone" "zone" {
+  name = "testofalamashxarh.link"
+} 
+
+module "acm" {
+  source  = "terraform-aws-modules/acm/aws"
+  version = "~> 4.0"
+
+  domain_name  = var.rt_zone_name
+  zone_id      = data.aws_route53_zone.zone.zone_id
+
+  subject_alternative_names = [
+    "*.${var.rt_zone_name}"
+  ]
+
+  create_certificate = var.acm_create_certificate
+  
+  tags               = var.tags
+}
+
+
+module "acm_cloudfront" {
+  source  = "terraform-aws-modules/acm/aws"
+  version = "~> 4.0"
+
+  providers = {
+    aws = aws.us-east-1
+  }
+  
+  domain_name  = var.rt_zone_name
+  zone_id      = data.aws_route53_zone.zone.zone_id
+
+  subject_alternative_names = [
+    "*.${var.rt_zone_name}",
+  ]
+
+  create_certificate = var.acm_create_certificate
+  
+  tags               = var.tags
+}
+
 resource "random_id" "RANDOM_ID" {
   byte_length = "2"
 }
@@ -74,6 +114,26 @@ module "vpc" {
       }
     }
   ]
+  https_listeners = [
+    {
+      port               = 443
+      protocol           = "HTTPS"
+      certificate_arn    = module.acm.acm_certificate_arn
+      target_group_index = 0
+    }
+  ]
+
+  https_listener_rules = [
+    {
+      http_tcp_listener_index = 0
+      priority                = 1
+
+      actions = [{
+        type = "forward"
+        target_group_index = 1
+      }]
+}
+]
 }
 
 # ------- ECS Role -------
