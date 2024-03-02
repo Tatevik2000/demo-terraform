@@ -1,3 +1,15 @@
+variable "tags" {
+  description = "The key-value maps for tagging"
+  type        = map(string)
+  default     = {}
+}
+
+variable "acm_create_certificate" {
+  description = "Whether to create ACM certificate"
+  type        = bool
+  default     = true
+}
+
 variable "rt_zone_name" {
   description = "Name of DNS zone"
   type        = string
