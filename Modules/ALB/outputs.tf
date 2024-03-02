@@ -1,6 +1,5 @@
-output "arn_alb" {  
-  description = "ARN of the Application Load Balancer"  
-  value       = var.create_alb ? aws_alb.alb[0].arn : null  
+output "alb_arn" {  
+  value = module.alb_module.alb_arn  
 }  
   
 output "arn_tg" {  
@@ -20,5 +19,5 @@ output "arn_listener" {
   
 output "dns_alb" {  
   description = "DNS Name of the Application Load Balancer"  
-  value       = var.create_alb ? aws_alb.alb[0].dns_name : null  
+  value       = value = module.alb_module.alb_dns_name  
 }  
