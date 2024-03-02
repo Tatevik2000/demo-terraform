@@ -55,7 +55,6 @@ module "vpc" {
 
  module "alb" {
   source = "terraform-aws-modules/alb/aws"
-  version = "~> 8.0"
   name    = "${var.environment_name}-alb" 
   vpc_id  = module.vpc.aws_vpc
   subnets = [module.vpc.public_subnets[0], module.vpc.public_subnets[1]] 
@@ -82,12 +81,17 @@ module "vpc" {
     }
   }
 
-  listeners = {
-    ex-http-https-redirect = {
-      port     = 80
-      protocol = "HTTP"
-      }
-    }
+listeners = {  
+  http = {  
+    port     = 80  
+    protocol = "HTTP"  
+    default_action {  
+      type             = "forward"  
+      target_group_key = "front"  
+    }  
+  }  
+}  
+
    
 
     target_groups = [
@@ -114,26 +118,6 @@ module "vpc" {
       }
     }
   ]
-  https_listeners = [
-    {
-      port               = 443
-      protocol           = "HTTPS"
-      certificate_arn    = module.acm.acm_certificate_arn
-      target_group_index = 0
-    }
-  ]
-
-  https_listener_rules = [
-    {
-      http_tcp_listener_index = 0
-      priority                = 1
-
-      actions = [{
-        type = "forward"
-        target_group_index = 1
-      }]
-}
-]
 }
 
 # ------- ECS Role -------
