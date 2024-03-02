@@ -81,7 +81,7 @@ module "vpc" {
     }
   }
 
-listener = [
+listeners = [
     {
       instance_port     = 80
       instance_protocol = "HTTP"
