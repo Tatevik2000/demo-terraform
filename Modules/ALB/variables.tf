@@ -1,3 +1,62 @@
+variable "create_target_group_2" {  
+  description = "Whether to create a second target group"  
+  type        = bool  
+  default     = false  
+}    
+  
+ 
+  
+variable "tg_type_2" {  
+  description = "Type of target that you must specify when registering targets with this target group"  
+  type        = string  
+  default     = "instance" # or "ip" or "lambda", based on your use case  
+}  
+  
+variable "deregistration_delay" {  
+  description = "Amount of time to wait before changing the state of a deregistering target from draining to unused"  
+  type        = number  
+  default     = 300 # default is 300 seconds  
+}  
+  
+# Health check related variables for the second target group  
+  
+variable "health_check_enabled" {  
+  description = "Indicates whether health checks are enabled for the second target group"  
+  type        = bool  
+  default     = true  
+}  
+  
+variable "health_check_interval" {  
+  description = "Approximate amount of time, in seconds, between health checks of an individual target for the second target group"  
+  type        = number  
+  default     = 30  
+}   
+  
+variable "health_check_timeout" {  
+  description = "Amount of time, in seconds, during which no response means a failed health check for the second target group"  
+  type        = number  
+  default     = 5  
+}  
+  
+variable "healthy_threshold" {  
+  description = "Number of consecutive health checks successes required before considering an unhealthy target healthy for the second target group"  
+  type        = number  
+  default     = 3  
+}  
+  
+variable "unhealthy_threshold" {  
+  description = "Number of consecutive health check failures required before considering the target unhealthy for the second target group"  
+  type        = number  
+  default     = 3  
+}  
+  
+variable "health_check_matcher" {  
+  description = "HTTP codes to use when checking for a successful response from a target for the second target group's health checks"  
+  type        = string  
+  default     = "200"  
+}  
+
+
 variable "name" {
   description = "A name for the target group or ALB"
   type        = string
