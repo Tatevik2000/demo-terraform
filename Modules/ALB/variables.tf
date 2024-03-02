@@ -86,7 +86,7 @@ variable "enable_https" {
   default     = false
 }
 
-variable "create_target_group" {
+variable "create_target_group_1" {
   description = "Set to true to create a Target Group"
   type        = bool
   default     = false
