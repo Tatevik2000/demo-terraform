@@ -30,6 +30,17 @@ resource "aws_lb_target_group" "tg_other" {
   protocol = "HTTP"  
   vpc_id   =  module.vpc.aws_vpc
   target_type = "ip"
+  health_check {  
+    enabled             = true  
+    interval            = 30  
+    path                = "/healthcheck" # Replace with your actual health check endpoint  
+    port                = "traffic-port"  
+    protocol            = "HTTP"  
+    matcher             = "200"          # The HTTP response codes to indicate a healthy state  
+    timeout             = 5  
+    healthy_threshold   = 2  
+    unhealthy_threshold = 2  
+  }  
 }  
   
 # Create the second target group for /api traffic  
@@ -39,6 +50,17 @@ resource "aws_lb_target_group" "tg_api" {
   protocol = "HTTP"  
   target_type = "ip"
   vpc_id   = module.vpc.aws_vpc # Replace with your actual VPC ID  
+  health_check {  
+    enabled             = true  
+    interval            = 30  
+    path                = "/healthcheck" # Replace with your actual health check endpoint  
+    port                = "traffic-port"  
+    protocol            = "HTTP"  
+    matcher             = "200"          # The HTTP response codes to indicate a healthy state  
+    timeout             = 5  
+    healthy_threshold   = 2  
+    unhealthy_threshold = 2  
+  }  
 }  
   
 # Create an HTTP listener  
