@@ -15,7 +15,6 @@ module "vpc" {
 
  module "alb" {
   source = "terraform-aws-modules/alb/aws"
-  version = "~> 8.0"
 
   name    = "${var.environment_name}-alb" 
   vpc_id  = module.vpc.id
