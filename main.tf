@@ -33,7 +33,7 @@ resource "aws_lb_target_group" "tg_other" {
   health_check {  
     enabled             = true  
     interval            = 30  
-    path                = "/status" # Replace with your actual health check endpoint  
+    path                = "/" # Replace with your actual health check endpoint  
     port                = "traffic-port"  
     protocol            = "HTTP"  
     matcher             = "200"          # The HTTP response codes to indicate a healthy state  
@@ -53,7 +53,7 @@ resource "aws_lb_target_group" "tg_api" {
   health_check {  
     enabled             = true  
     interval            = 30  
-    path                = "/status" # Replace with your actual health check endpoint  
+    path                = "/" # Replace with your actual health check endpoint  
     port                = "traffic-port"  
     protocol            = "HTTP"  
     matcher             = "200"          # The HTTP response codes to indicate a healthy state  
