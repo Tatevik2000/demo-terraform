@@ -22,7 +22,7 @@ resource "aws_lb" "alb" {
   
   enable_deletion_protection = false  
 }  
-  
+/*
 # Create the first target group for general traffic  
 resource "aws_lb_target_group" "tg_other" {  
   name     = "tg-other"  
@@ -74,21 +74,6 @@ resource "aws_lb_listener" "http_listener" {
     target_group_arn = aws_lb_target_group.tg_other.arn  
   }  
 }  
-/*
-# Create an HTTPS listener using the ACM certificate  
-resource "aws_lb_listener" "https_listener" {  
-  load_balancer_arn = aws_lb.alb.arn  
-  port              = 443  
-  protocol          = "HTTPS"  
-  ssl_policy        = "ELBSecurityPolicy-2016-08" # Use an appropriate SSL policy for your needs  
-  certificate_arn   = module.acm.acm_certificate_arn # Replace with your actual ACM certificate ARN  
-  
-  default_action {  
-    type             = "forward"  
-    target_group_arn = aws_lb_target_group.tg_other.arn  
-  }  
-}  
-*/
   
 # Create a listener rule to forward /api traffic to the tg_api target group  
 resource "aws_lb_listener_rule" "api_rule" {  
@@ -106,7 +91,7 @@ resource "aws_lb_listener_rule" "api_rule" {
     }  
   }  
 }  
-  
+*/
 # Security group for the ALB  
 resource "aws_security_group" "alb_sg" {  
   name        = "alb-sg"  
