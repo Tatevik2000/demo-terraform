@@ -239,7 +239,7 @@ module "ecs_service_client" {
   container_name      = var.container_name["client"] 
   aws_region          = var.aws_region 
 }
-*/
+
 # ------- Creating ECS Autoscaling policies for the server application -------
 module "ecs_autoscaling_server" {
   depends_on   = [module.ecs_service_server]
@@ -259,6 +259,7 @@ module "ecs_autoscaling_client" {
   min_capacity = 1
   max_capacity = 4
 }
+*/
 
 # ------- Creating a SNS topic -------
 module "sns" {
