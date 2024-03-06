@@ -1,3 +1,5 @@
+
+# ------- Random numbers intended to be used as unique identifiers for resources -------
 resource "random_id" "RANDOM_ID" {
   byte_length = "2"
 }
@@ -10,109 +12,99 @@ module "vpc" {
   source = "./Modules/vpc"
   cidr   = ["10.120.0.0/16"]
   name   = var.environment_name
-}  
-  
-# Define the ALB  
-resource "aws_lb" "alb" {  
-  name               = "alb-demo"  
-  internal           = false  
-  load_balancer_type = "application"  
-  security_groups    = [aws_security_group.alb_sg.id]  
-  subnets            = [module.vpc.public_subnets[0], module.vpc.public_subnets[1]]  
-  
-  enable_deletion_protection = false  
-}  
+}
 
-# Create the first target group for general traffic  
-resource "aws_lb_target_group" "tg_other" {  
-  name     = "tg-other"  
-  port     = 80  
-  protocol = "HTTP"  
-  vpc_id   =  module.vpc.aws_vpc
-  target_type = "ip"
-  health_check {  
-    enabled             = true  
-    interval            = 30  
-    path                = "/" # Replace with your actual health check endpoint  
-    port                = "traffic-port"  
-    protocol            = "HTTP"  
-    matcher             = "200"          # The HTTP response codes to indicate a healthy state  
-    timeout             = 5  
-    healthy_threshold   = 2  
-    unhealthy_threshold = 2  
-  }  
-}  
+# ------- Creating Target Group for the server ALB blue environment -------
+module "target_group_server_blue" {
+  source              = "./Modules/ALB"
+  create_target_group = true
+  name                = "tg-${var.environment_name}-s-b"
+  port                = 80
+  protocol            = "HTTP"
+  vpc                 = module.vpc.aws_vpc
+  tg_type             = "ip"
+  health_check_path   = "/status"
+  health_check_port   = var.port_app_server
+}
 
-# Create the second target group for /api traffic  
-resource "aws_lb_target_group" "tg_api" {  
-  name     = "tg-api"  
-  port     = 80  
-  protocol = "HTTP"  
-  target_type = "ip"
-  vpc_id   = module.vpc.aws_vpc # Replace with your actual VPC ID  
-  health_check {  
-    enabled             = true  
-    interval            = 30  
-    path                = "/" # Replace with your actual health check endpoint  
-    port                = "traffic-port"  
-    protocol            = "HTTP"  
-    matcher             = "200"          # The HTTP response codes to indicate a healthy state  
-    timeout             = 5  
-    healthy_threshold   = 2  
-    unhealthy_threshold = 2  
-  }  
-}  
+# ------- Creating Target Group for the server ALB green environment -------
+module "target_group_server_green" {
+  source              = "./Modules/ALB"
+  create_target_group = true
+  name                = "tg-${var.environment_name}-s-g"
+  port                = 80
+  protocol            = "HTTP"
+  vpc                 = module.vpc.aws_vpc
+  tg_type             = "ip"
+  health_check_path   = "/status"
+  health_check_port   = var.port_app_server
+}
 
-# Create an HTTP listener  
-resource "aws_lb_listener" "http_listener" {  
-  load_balancer_arn = aws_lb.alb.arn  
-  port              = 80  
-  protocol          = "HTTP"  
-  
-  default_action {  
-    type             = "forward"  
-    target_group_arn = aws_lb_target_group.tg_other.arn  
-  }  
-}  
+# ------- Creating Target Group for the client ALB blue environment -------
+module "target_group_client_blue" {
+  source              = "./Modules/ALB"
+  create_target_group = true
+  name                = "tg-${var.environment_name}-c-b"
+  port                = 80
+  protocol            = "HTTP"
+  vpc                 = module.vpc.aws_vpc
+  tg_type             = "ip"
+  health_check_path   = "/"
+  health_check_port   = var.port_app_client
+}
 
-# Create a listener rule to forward /api traffic to the tg_api target group  
-resource "aws_lb_listener_rule" "api_rule" {  
-  listener_arn = aws_lb_listener.http_listener.arn  
-  priority     = 100  
-  
-  action {  
-    type             = "forward"  
-    target_group_arn = aws_lb_target_group.tg_api.arn  
-  }  
-  
-  condition {  
-    path_pattern {  
-      values = ["/api/*"]  
-    }  
-  }  
-}  
+# ------- Creating Target Group for the client ALB green environment -------
+module "target_group_client_green" {
+  source              = "./Modules/ALB"
+  create_target_group = true
+  name                = "tg-${var.environment_name}-c-g"
+  port                = 80
+  protocol            = "HTTP"
+  vpc                 = module.vpc.aws_vpc
+  tg_type             = "ip"
+  health_check_path   = "/"
+  health_check_port   = var.port_app_client
+}
 
-# Security group for the ALB  
-resource "aws_security_group" "alb_sg" {  
-  name        = "alb-sg"  
-  description = "ALB Security Group"  
-  vpc_id      = module.vpc.aws_vpc 
-  
-  ingress {  
-    from_port   = 80  
-    to_port     = 80  
-    protocol    = "tcp"  
-    cidr_blocks = ["0.0.0.0/0"]  
-  }  
-  
-  ingress {  
-    from_port   = 443  
-    to_port     = 443  
-    protocol    = "tcp"  
-    cidr_blocks = ["0.0.0.0/0"]  
-  }  
-}  
+# ------- Creating Security Group for the server ALB -------
+module "security_group_alb_server" {
+  source              = "./Modules/SecurityGroup"
+  name                = "alb-${var.environment_name}-server"
+  description         = "Controls access to the server ALB"
+  vpc_id              = module.vpc.aws_vpc
+  cidr_blocks_ingress = ["0.0.0.0/0"]
+  ingress_port        = 80
+}
 
+# ------- Creating Security Group for the client ALB -------
+module "security_group_alb_client" {
+  source              = "./Modules/SecurityGroup"
+  name                = "alb-${var.environment_name}-client"
+  description         = "Controls access to the client ALB"
+  vpc_id              = module.vpc.aws_vpc
+  cidr_blocks_ingress = ["0.0.0.0/0"]
+  ingress_port        = 80
+}
+
+# ------- Creating Server Application ALB -------
+module "alb_server" {
+  source         = "./Modules/ALB"
+  create_alb     = true
+  name           = "${var.environment_name}-ser"
+  subnets        = [module.vpc.public_subnets[0], module.vpc.public_subnets[1]]
+  security_group = module.security_group_alb_server.sg_id
+  target_group   = module.target_group_server_blue.arn_tg
+}
+
+# ------- Creating Client Application ALB -------
+module "alb_client" {
+  source         = "./Modules/ALB"
+  create_alb     = true
+  name           = "${var.environment_name}-cli"
+  subnets        = [module.vpc.public_subnets[0], module.vpc.public_subnets[1]]
+  security_group = module.security_group_alb_client.sg_id
+  target_group   = module.target_group_client_blue.arn_tg
+}
 
 # ------- ECS Role -------
 module "ecs_role" {
@@ -176,7 +168,7 @@ module "security_group_ecs_task_server" {
   description     = "Controls access to the server ECS task"
   vpc_id          = module.vpc.aws_vpc
   ingress_port    = var.port_app_server
-  security_groups = [aws_security_group.alb_sg.id]
+  security_groups = [module.security_group_alb_server.sg_id]
 }
 # ------- Creating a client Security Group for ECS TASKS -------
 module "security_group_ecs_task_client" {
@@ -185,7 +177,7 @@ module "security_group_ecs_task_client" {
   description     = "Controls access to the client ECS task"
   vpc_id          = module.vpc.aws_vpc
   ingress_port    = var.port_app_client
-  security_groups = [aws_security_group.alb_sg.id]
+  security_groups = [module.security_group_alb_client.sg_id]
 }
 
 # ------- Creating ECS Cluster -------
@@ -196,15 +188,15 @@ module "ecs_cluster" {
 
 # ------- Creating ECS Service server -------
 module "ecs_service_server" {
-  depends_on          = [aws_lb.alb]
+  depends_on          = [module.alb_server]
   source              = "./Modules/ECS/Service"
   name                = "${var.environment_name}-server"
   ecs_cluster_id      = module.ecs_cluster.ecs_cluster_id
   arn_task_definition = module.ecs_taks_definition_server.arn_task_definition  
   security_group_ids  = [module.security_group_ecs_task_server.sg_id] 
   subnet_ids          = [module.vpc.private_subnets_server[0], module.vpc.private_subnets_server[1]]
-  target_group_arn    = aws_lb_target_group.tg_api.arn
-  desired_tasks       = 2
+  target_group_arn    = module.target_group_server_blue.arn_tg
+  desired_tasks       = 1
   container_port      = var.port_app_server
   container_memory    = "512"
   container_cpu       = 256
@@ -219,15 +211,15 @@ module "ecs_service_server" {
 
 # ------- Creating ECS Service client -------
 module "ecs_service_client" {
-  depends_on          = [aws_lb.alb]
+  depends_on          = [module.alb_client]
   source              = "./Modules/ECS/Service"
   name                = "${var.environment_name}-client"
   ecs_cluster_id      = module.ecs_cluster.ecs_cluster_id 
   arn_task_definition = module.ecs_taks_definition_client.arn_task_definition
   security_group_ids  = [module.security_group_ecs_task_client.sg_id]
   subnet_ids          = [module.vpc.private_subnets_client[0], module.vpc.private_subnets_client[1]]
-  target_group_arn    = aws_lb_target_group.tg_other.arn
-  desired_tasks       = 2
+  target_group_arn    = module.target_group_client_blue.arn_tg
+  desired_tasks       = 1
   container_port      = var.port_app_client
   container_memory    = "512"
   container_cpu       = 256
@@ -260,12 +252,13 @@ module "ecs_autoscaling_client" {
   max_capacity = 4
 }
 
-
 # ------- Creating a SNS topic -------
 module "sns" {
   source   = "./Modules/SNS"
   sns_name = "sns-${var.environment_name}"
 }
+
+
 
 # ------- Creating Bucket to store assets accessed by the Back-end -------
 module "s3_assets" {
