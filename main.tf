@@ -193,7 +193,7 @@ module "ecs_cluster" {
   source = "./Modules/ECS/Cluster"
   name   = var.environment_name
 }
-
+/*
 # ------- Creating ECS Service server -------
 module "ecs_service_server" {
   depends_on          = [aws_lb.alb]
@@ -239,7 +239,7 @@ module "ecs_service_client" {
   container_name      = var.container_name["client"] 
   aws_region          = var.aws_region 
 }
-
+*/
 # ------- Creating ECS Autoscaling policies for the server application -------
 module "ecs_autoscaling_server" {
   depends_on   = [module.ecs_service_server]
