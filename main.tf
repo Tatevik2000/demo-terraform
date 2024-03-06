@@ -204,7 +204,7 @@ module "ecs_service_server" {
   security_group_ids  = [module.security_group_ecs_task_server.sg_id] 
   subnet_ids          = [module.vpc.private_subnets_server[0], module.vpc.private_subnets_server[1]]
   target_group_arn    = aws_lb_target_group.tg_api.arn
-  desired_tasks       = 1
+  desired_tasks       = 2
   container_port      = var.port_app_server
   container_memory    = "512"
   container_cpu       = 256
@@ -227,7 +227,7 @@ module "ecs_service_client" {
   security_group_ids  = [module.security_group_ecs_task_client.sg_id]
   subnet_ids          = [module.vpc.private_subnets_client[0], module.vpc.private_subnets_client[1]]
   target_group_arn    = aws_lb_target_group.tg_other.arn
-  desired_tasks       = 1
+  desired_tasks       = 2
   container_port      = var.port_app_client
   container_memory    = "512"
   container_cpu       = 256
