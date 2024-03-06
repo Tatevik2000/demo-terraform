@@ -22,7 +22,7 @@ resource "aws_lb" "alb" {
   
   enable_deletion_protection = false  
 }  
-/*
+
 # Create the first target group for general traffic  
 resource "aws_lb_target_group" "tg_other" {  
   name     = "tg-other"  
@@ -91,7 +91,7 @@ resource "aws_lb_listener_rule" "api_rule" {
     }  
   }  
 }  
-*/
+
 # Security group for the ALB  
 resource "aws_security_group" "alb_sg" {  
   name        = "alb-sg"  
@@ -193,7 +193,7 @@ module "ecs_cluster" {
   source = "./Modules/ECS/Cluster"
   name   = var.environment_name
 }
-/*
+
 # ------- Creating ECS Service server -------
 module "ecs_service_server" {
   depends_on          = [aws_lb.alb]
@@ -259,7 +259,7 @@ module "ecs_autoscaling_client" {
   min_capacity = 1
   max_capacity = 4
 }
-*/
+
 
 # ------- Creating a SNS topic -------
 module "sns" {
