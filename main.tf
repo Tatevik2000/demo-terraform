@@ -46,7 +46,7 @@ resource "aws_lb_target_group" "tg_other" {
 # Create the second target group for /api traffic  
 resource "aws_lb_target_group" "tg_api" {  
   name     = "tg-api"  
-  port     = 3001  
+  port     = 80  
   protocol = "HTTP"  
   target_type = "ip"
   vpc_id   = module.vpc.aws_vpc # Replace with your actual VPC ID  
