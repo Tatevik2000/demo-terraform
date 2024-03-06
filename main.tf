@@ -42,7 +42,7 @@ resource "aws_lb_target_group" "tg_other" {
     unhealthy_threshold = 2  
   }  
 }  
-  
+/*
 # Create the second target group for /api traffic  
 resource "aws_lb_target_group" "tg_api" {  
   name     = "tg-api"  
@@ -62,7 +62,7 @@ resource "aws_lb_target_group" "tg_api" {
     unhealthy_threshold = 2  
   }  
 }  
-  
+*/
 # Create an HTTP listener  
 resource "aws_lb_listener" "http_listener" {  
   load_balancer_arn = aws_lb.alb.arn  
@@ -74,7 +74,7 @@ resource "aws_lb_listener" "http_listener" {
     target_group_arn = aws_lb_target_group.tg_other.arn  
   }  
 }  
-  
+/*
 # Create a listener rule to forward /api traffic to the tg_api target group  
 resource "aws_lb_listener_rule" "api_rule" {  
   listener_arn = aws_lb_listener.http_listener.arn  
@@ -91,7 +91,7 @@ resource "aws_lb_listener_rule" "api_rule" {
     }  
   }  
 }  
-
+*/
 # Security group for the ALB  
 resource "aws_security_group" "alb_sg" {  
   name        = "alb-sg"  
@@ -193,7 +193,7 @@ module "ecs_cluster" {
   source = "./Modules/ECS/Cluster"
   name   = var.environment_name
 }
-
+/*
 # ------- Creating ECS Service server -------
 module "ecs_service_server" {
   depends_on          = [aws_lb.alb]
@@ -216,7 +216,7 @@ module "ecs_service_server" {
   container_name      = var.container_name["server"] 
   aws_region          = var.aws_region 
 }
-
+*/
 # ------- Creating ECS Service client -------
 module "ecs_service_client" {
   depends_on          = [aws_lb.alb]
