@@ -234,14 +234,14 @@ module "ecs_service_client" {
 
 
 module "ssm_parameter" {
-  source  = "./Modules/ECS/SSM"
+  source  = "./Modules/SSM"
   name    = "TableName"
   value   = "assets-table-demo"
   type    = "String" 
 }
 
 module "ssm_parameter_alb" {
-  source  = "./Modules/ECS/SSM"
+  source  = "./Modules/SSM"
   name    = "LOAD_BALANCER_URL"
   value   =  module.alb_server.dns_alb
   type    = "String" 
