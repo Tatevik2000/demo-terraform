@@ -24,7 +24,13 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
         "awslogs-region": var.aws_region, 
         "awslogs-stream-prefix": "ecs"  
       }  
-    }
+    },
+    "environment": [
+          for env in var.environment_variables : {
+            "name"  = env.name
+            "value" = env.value
+          }
+    ],
   }])  
 }  
   
