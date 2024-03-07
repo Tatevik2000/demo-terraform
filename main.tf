@@ -256,4 +256,3 @@ module "dynamodb_table" {
   source = "./Modules/Dynamodb"
   name   = "assets-table-${var.environment_name}"
 }
-
