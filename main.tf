@@ -1,4 +1,3 @@
-
 # ------- Random numbers intended to be used as unique identifiers for resources -------
 resource "random_id" "RANDOM_ID" {
   byte_length = "2"
@@ -77,33 +76,22 @@ module "security_group_alb_server" {
 }
 
 # ------- Creating Security Group for the client ALB -------
-module "security_group_alb_client" {
-  source              = "./Modules/SecurityGroup"
-  name                = "alb-${var.environment_name}-client"
-  description         = "Controls access to the client ALB"
-  vpc_id              = module.vpc.aws_vpc
-  cidr_blocks_ingress = ["0.0.0.0/0"]
-  ingress_port        = 80
-}
+module "security_group_alb" {  
+  source              = "./Modules/SecurityGroup"  
+  name                = "alb-${var.environment_name}"  
+  description         = "Controls access to the ALB"  
+  vpc_id              = module.vpc.aws_vpc  
+  cidr_blocks_ingress = ["0.0.0.0/0"]  
+  ingress_port        = 80 // Assuming HTTP traffic for both services  
+}  
 
-# ------- Creating Server Application ALB -------
-module "alb_server" {
-  source         = "./Modules/ALB"
-  create_alb     = true
-  name           = "${var.environment_name}-ser"
-  subnets        = [module.vpc.public_subnets[0], module.vpc.public_subnets[1]]
-  security_group = module.security_group_alb_server.sg_id
-  target_group   = module.target_group_server_blue.arn_tg
-}
-
-# ------- Creating Client Application ALB -------
-module "alb_client" {
-  source         = "./Modules/ALB"
-  create_alb     = true
-  name           = "${var.environment_name}-cli"
-  subnets        = [module.vpc.public_subnets[0], module.vpc.public_subnets[1]]
-  security_group = module.security_group_alb_client.sg_id
-  target_group   = module.target_group_client_blue.arn_tg
+module "alb" {  
+  source         = "./Modules/ALB"  
+  create_alb     = true  
+  name           = "${var.environment_name}-alb"  
+  subnets        = [module.vpc.public_subnets[0], module.vpc.public_subnets[1]]  
+  security_group = module.security_group_alb.sg_id  
+  # No default target group is specified here since we have multiple services  
 }
 
 # ------- ECS Role -------
@@ -177,7 +165,7 @@ module "security_group_ecs_task_client" {
   description     = "Controls access to the client ECS task"
   vpc_id          = module.vpc.aws_vpc
   ingress_port    = var.port_app_client
-  security_groups = [module.security_group_alb_client.sg_id]
+  security_groups = [module.security_group_alb.sg_id]
 }
 
 # ------- Creating ECS Cluster -------
@@ -188,7 +176,7 @@ module "ecs_cluster" {
 
 # ------- Creating ECS Service server -------
 module "ecs_service_server" {
-  depends_on          = [module.alb_server]
+  depends_on          = [module.alb]
   source              = "./Modules/ECS/Service"
   name                = "${var.environment_name}-server"
   ecs_cluster_id      = module.ecs_cluster.ecs_cluster_id
@@ -211,7 +199,7 @@ module "ecs_service_server" {
 
 # ------- Creating ECS Service client -------
 module "ecs_service_client" {
-  depends_on          = [module.alb_client]
+  depends_on          = [module.alb]
   source              = "./Modules/ECS/Service"
   name                = "${var.environment_name}-client"
   ecs_cluster_id      = module.ecs_cluster.ecs_cluster_id 
@@ -257,8 +245,6 @@ module "sns" {
   source   = "./Modules/SNS"
   sns_name = "sns-${var.environment_name}"
 }
-
-
 
 # ------- Creating Bucket to store assets accessed by the Back-end -------
 module "s3_assets" {
