@@ -31,12 +31,10 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
             "value" = env.value
           }
     ],
-   "secrets": [
-          for secret in var.secrets : {
-                      "name"  = secret.name
-                      "valueFrom" = secret.value
-                    }
-    ]
+    secrets   = [for s in var.secrets : {
+          name      = s.name
+          valueFrom = s.arn
+        }]
   }])  
 }  
   
