@@ -144,8 +144,8 @@ module "ecs_taks_definition_server" {
   docker_image_url   = "${module.ecr.ecr_repository_url}:back"
   aws_region         = var.aws_region
   environment_variables = [
-    { name = module.ssm_parameter.parameter_name, value = module.ssm_parameter.ssm_parameter_arn },
-    { name = module.ssm_parameter_alb.parameter_name, value = module.ssm_parameter_alb.ssm_parameter_arn }
+    { name = module.ssm_parameter.parameter_name, value = module.ssm_parameter.ssm_parameter_value },
+    { name = module.ssm_parameter_alb.parameter_name, value = module.ssm_parameter_alb.ssm_parameter_value }
   ]
 }
 
