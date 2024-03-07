@@ -60,8 +60,8 @@ variable "environment_variables" {
 }
 
 
-variable "secret" {
-  description = "A list of maps containing secret for the container"
-  type        = list(map(string))
-  default     = []
+variable "map_secrets" {
+  type        = map(string)
+  description = "The secrets variables to pass to the container. This is a map of string: {key: value}. map_secrets overrides secrets"
+  default     = null
 }
