@@ -207,6 +207,10 @@ module "ecs_service_server" {
   memory              = "512" 
   container_name      = var.container_name["server"] 
   aws_region          = var.aws_region 
+  environment_variables = [
+    { name = module.ssm_parameter.parameter_name, value = module.ssm_parameter.ssm_parameter_arn },
+    { name = module.ssm_parameter_alb.parameter_name, value = module.ssm_parameter_alb.ssm_parameter_arn }
+  ]
 }
 
 # ------- Creating ECS Service client -------
