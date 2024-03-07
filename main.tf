@@ -150,6 +150,7 @@ module "ecs_taks_definition_server" {
       name = module.ssm_parameter_alb.parameter_name,
       arn  = module.ssm_parameter_alb.ssm_parameter_arn
     }
+]
 }
 
 # ------- Creating ECS Task Definition for the client -------
