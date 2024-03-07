@@ -58,3 +58,10 @@ variable "environment_variables" {
   type        = list(map(string))
   default     = []
 }
+
+
+variable "secret" {
+  description = "A list of maps containing secret for the container"
+  type        = list(map(string))
+  default     = []
+}
