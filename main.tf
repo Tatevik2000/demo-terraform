@@ -232,6 +232,20 @@ module "ecs_service_client" {
   aws_region          = var.aws_region 
 }
 
+
+module "ssm_parameter" {
+  source  = "./Modules/ECS/SSM"
+  name    = "TableName"
+  value   = "assets-table-demo"
+  type    = "String" 
+}
+
+module "ssm_parameter_alb" {
+  source  = "./Modules/ECS/SSM"
+  name    = "LOAD_BALANCER_URL"
+  value   =  module.alb_server.dns_alb
+  type    = "String" 
+}
 # ------- Creating ECS Autoscaling policies for the server application -------
 module "ecs_autoscaling_server" {
   depends_on   = [module.ecs_service_server]
@@ -257,7 +271,6 @@ module "sns" {
   source   = "./Modules/SNS"
   sns_name = "sns-${var.environment_name}"
 }
-
 
 
 # ------- Creating Bucket to store assets accessed by the Back-end -------
