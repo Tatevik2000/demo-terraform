@@ -103,4 +103,13 @@ data "aws_iam_policy_document" "role_policy_ecs_task_role" {
     ]
     resources = var.dynamodb_table
   }
+  statement {
+    sid       = "AllowSSMParameterAccess"
+    effect    = "Allow"
+    actions   = [
+      "ssm:GetParameter",
+      "ssm:GetParameters"
+    ]
+    resources = ["*"]
+   }
 }
