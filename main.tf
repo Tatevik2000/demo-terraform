@@ -141,10 +141,15 @@ module "ecs_taks_definition_server" {
   container_memory   = "512"    
   docker_image_url   = "${module.ecr.ecr_repository_url}:back"
   aws_region         = var.aws_region
-  secret = [
-    { name = module.ssm_parameter.parameter_name, valueFrom = module.ssm_parameter.ssm_parameter_value },
-    { name = module.ssm_parameter_alb.parameter_name, valueFrom = module.ssm_parameter_alb.ssm_parameter_value }
-  ]
+  secrets   = [
+    {
+      name = module.ssm_parameter.parameter_name,
+      arn  = module.ssm_parameter.ssm_parameter_arn
+    },
+    {
+      name = module.ssm_parameter_alb.parameter_name,
+      arn  = module.ssm_parameter_alb.ssm_parameter_arn
+    }
 }
 
 # ------- Creating ECS Task Definition for the client -------
