@@ -32,7 +32,7 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
           }
     ],
    "secrets": [
-          for secret in var.secret : {
+          for secret in var.secrets : {
                       "name"  = secret.name
                       "valueFrom" = secret.value
                     }
