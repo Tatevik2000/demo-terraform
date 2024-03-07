@@ -1,5 +1,3 @@
-
-# ------- Random numbers intended to be used as unique identifiers for resources -------
 resource "random_id" "RANDOM_ID" {
   byte_length = "2"
 }
@@ -143,9 +141,9 @@ module "ecs_taks_definition_server" {
   container_memory   = "512"    
   docker_image_url   = "${module.ecr.ecr_repository_url}:back"
   aws_region         = var.aws_region
-  environment_variables = [
-    { name = module.ssm_parameter.parameter_name, value = module.ssm_parameter.ssm_parameter_value },
-    { name = module.ssm_parameter_alb.parameter_name, value = module.ssm_parameter_alb.ssm_parameter_value }
+  secret = [
+    { name = module.ssm_parameter.parameter_name, valueFrom = module.ssm_parameter.ssm_parameter_value },
+    { name = module.ssm_parameter_alb.parameter_name, valueFrom = module.ssm_parameter_alb.ssm_parameter_value }
   ]
 }
 
