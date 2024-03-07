@@ -1,14 +1,5 @@
 provider "aws" {
-  profile = var.aws_profile
   region  = var.aws_region
-
-  # provider level tags - yet inconsistent when executing 
-  # default_tags {
-  #   tags = {
-  #     Created_by = "Terraform"
-  #     Project    = "AWS_demo_fullstack_devops"
-  #   }
-  # }
 }
 
 # ------- Random numbers intended to be used as unique identifiers for resources -------
