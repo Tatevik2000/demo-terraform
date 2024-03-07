@@ -239,7 +239,7 @@ module "ecs_service_client" {
 
 module "ssm_parameter" {
   source  = "./Modules/SSM"
-  name    = "TableName"
+  name    = "DYNAMODB_TABLE"
   value   = "assets-table-demo"
   type    = "String" 
 }
