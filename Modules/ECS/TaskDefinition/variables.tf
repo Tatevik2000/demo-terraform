@@ -52,3 +52,9 @@ variable "aws_region" {
   description = "The AWS region where the log group will be created"  
   type        = string  
 }  
+
+variable "environment_variables" {
+  description = "A list of maps containing environment variables for the container"
+  type        = list(map(string))
+  default     = []
+}
