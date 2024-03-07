@@ -1,11 +1,3 @@
-# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-# SPDX-License-Identifier: MIT-0
-
-/*===========================
-          Root file
-============================*/
-
-# ------- Providers -------
 provider "aws" {
   profile = var.aws_profile
   region  = var.aws_region
@@ -27,9 +19,9 @@ resource "random_id" "RANDOM_ID" {
 # ------- Account ID -------
 data "aws_caller_identity" "id_current_account" {}
 
-# ------- Networking -------
-module "networking" {
-  source = "./Modules/Networking"
+# ------- vpc -------
+module "vpc" {
+  source = "./Modules/vpc"
   cidr   = ["10.120.0.0/16"]
   name   = var.environment_name
 }
@@ -41,7 +33,7 @@ module "target_group_server_blue" {
   name                = "tg-${var.environment_name}-s-b"
   port                = 80
   protocol            = "HTTP"
-  vpc                 = module.networking.aws_vpc
+  vpc                 = module.vpc.aws_vpc
   tg_type             = "ip"
   health_check_path   = "/status"
   health_check_port   = var.port_app_server
@@ -54,7 +46,7 @@ module "target_group_server_green" {
   name                = "tg-${var.environment_name}-s-g"
   port                = 80
   protocol            = "HTTP"
-  vpc                 = module.networking.aws_vpc
+  vpc                 = module.vpc.aws_vpc
   tg_type             = "ip"
   health_check_path   = "/status"
   health_check_port   = var.port_app_server
@@ -67,7 +59,7 @@ module "target_group_client_blue" {
   name                = "tg-${var.environment_name}-c-b"
   port                = 80
   protocol            = "HTTP"
-  vpc                 = module.networking.aws_vpc
+  vpc                 = module.vpc.aws_vpc
   tg_type             = "ip"
   health_check_path   = "/"
   health_check_port   = var.port_app_client
@@ -80,7 +72,7 @@ module "target_group_client_green" {
   name                = "tg-${var.environment_name}-c-g"
   port                = 80
   protocol            = "HTTP"
-  vpc                 = module.networking.aws_vpc
+  vpc                 = module.vpc.aws_vpc
   tg_type             = "ip"
   health_check_path   = "/"
   health_check_port   = var.port_app_client
@@ -91,7 +83,7 @@ module "security_group_alb_server" {
   source              = "./Modules/SecurityGroup"
   name                = "alb-${var.environment_name}-server"
   description         = "Controls access to the server ALB"
-  vpc_id              = module.networking.aws_vpc
+  vpc_id              = module.vpc.aws_vpc
   cidr_blocks_ingress = ["0.0.0.0/0"]
   ingress_port        = 80
 }
@@ -101,7 +93,7 @@ module "security_group_alb_client" {
   source              = "./Modules/SecurityGroup"
   name                = "alb-${var.environment_name}-client"
   description         = "Controls access to the client ALB"
-  vpc_id              = module.networking.aws_vpc
+  vpc_id              = module.vpc.aws_vpc
   cidr_blocks_ingress = ["0.0.0.0/0"]
   ingress_port        = 80
 }
@@ -111,7 +103,7 @@ module "alb_server" {
   source         = "./Modules/ALB"
   create_alb     = true
   name           = "${var.environment_name}-ser"
-  subnets        = [module.networking.public_subnets[0], module.networking.public_subnets[1]]
+  subnets        = [module.vpc.public_subnets[0], module.vpc.public_subnets[1]]
   security_group = module.security_group_alb_server.sg_id
   target_group   = module.target_group_server_blue.arn_tg
 }
@@ -121,7 +113,7 @@ module "alb_client" {
   source         = "./Modules/ALB"
   create_alb     = true
   name           = "${var.environment_name}-cli"
-  subnets        = [module.networking.public_subnets[0], module.networking.public_subnets[1]]
+  subnets        = [module.vpc.public_subnets[0], module.vpc.public_subnets[1]]
   security_group = module.security_group_alb_client.sg_id
   target_group   = module.target_group_client_blue.arn_tg
 }
@@ -188,7 +180,7 @@ module "security_group_ecs_task_server" {
   source          = "./Modules/SecurityGroup"
   name            = "ecs-task-${var.environment_name}-server"
   description     = "Controls access to the server ECS task"
-  vpc_id          = module.networking.aws_vpc
+  vpc_id          = module.vpc.aws_vpc
   ingress_port    = var.port_app_server
   security_groups = [module.security_group_alb_server.sg_id]
 }
@@ -197,7 +189,7 @@ module "security_group_ecs_task_client" {
   source          = "./Modules/SecurityGroup"
   name            = "ecs-task-${var.environment_name}-client"
   description     = "Controls access to the client ECS task"
-  vpc_id          = module.networking.aws_vpc
+  vpc_id          = module.vpc.aws_vpc
   ingress_port    = var.port_app_client
   security_groups = [module.security_group_alb_client.sg_id]
 }
