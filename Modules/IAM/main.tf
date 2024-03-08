@@ -113,3 +113,29 @@ data "aws_iam_policy_document" "role_policy_ecs_task_role" {
     resources = ["*"]
    }
 }
+
+resource "aws_iam_policy" "ecs_ssm_access_policy" {
+  name        = "${var.app_name}-ecs-ssm-access"
+  description = "Policy to allow ECS task execution role to access SSM parameters"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect   = "Allow",
+        Action   = [
+          "ssm:GetParameter",
+          "ssm:GetParameters",
+          "ssm:GetParametersByPath",
+        ],
+        Resource = var.ssm_parameter_arns
+      },
+    ],
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_ssm_access_attachment" {
+  role       = aws_iam_role.ecs_task_execution_role.name
+  policy_arn = aws_iam_policy.ecs_ssm_access_policy.arn
+}
+
