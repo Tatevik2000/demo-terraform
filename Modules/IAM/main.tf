@@ -127,7 +127,7 @@ resource "aws_iam_policy" "ecs_ssm_access_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "ecs_ssm_access_attachment" {
-  count      = length(aws_iam_policy.ecs_ssm_access_policy) > 0 ? 1 : 0
+  count      = var.create_ecs_role == true ? 1 : 0
   role       = aws_iam_role.ecs_task_execution_role[0].name
   policy_arn = aws_iam_policy.ecs_ssm_access_policy[0].arn
 }
