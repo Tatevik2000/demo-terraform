@@ -103,7 +103,7 @@ module "alb_client" {
   security_group = module.security_group_alb_client.sg_id
   target_group   = module.target_group_client_blue.arn_tg
 }
-
+/*
 # ------- ECS Role -------
 module "ecs_role" {
   source             = "./Modules/IAM"
@@ -121,7 +121,7 @@ module "ecs_role_policy" {
   create_policy = true
   attach_to     = module.ecs_role.name_role
 }
-
+*/
 # ------- Creating client ECR Repository to store Docker Images -------
 module "ecr" {
   source = "./Modules/ECR"
