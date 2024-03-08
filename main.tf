@@ -127,7 +127,7 @@ module "ecr" {
   source = "./Modules/ECR"
   name   = "demo"
 }
-
+/*
 # ------- Creating ECS Task Definition for the server -------
 module "ecs_taks_definition_server" {
   source             = "./Modules/ECS/TaskDefinition"
@@ -169,6 +169,7 @@ module "ecs_taks_definition_client" {
   docker_image_url   = "${module.ecr.ecr_repository_url}:front"
   aws_region         = var.aws_region
 }
+*/
 
 # ------- Creating a server Security Group for ECS TASKS -------
 module "security_group_ecs_task_server" {
@@ -194,7 +195,7 @@ module "ecs_cluster" {
   source = "./Modules/ECS/Cluster"
   name   = var.environment_name
 }
-
+/*
 # ------- Creating ECS Service server -------
 module "ecs_service_server" {
   depends_on          = [module.alb_server]
@@ -240,7 +241,7 @@ module "ecs_service_client" {
   container_name      = var.container_name["client"] 
   aws_region          = var.aws_region 
 }
-
+*/
 
 module "ssm_parameter" {
   source  = "./Modules/SSM"
