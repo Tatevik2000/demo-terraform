@@ -256,6 +256,7 @@ module "ssm_parameter_alb" {
   value   =  module.alb_server.dns_alb
   type    = "String" 
 }
+/*
 # ------- Creating ECS Autoscaling policies for the server application -------
 module "ecs_autoscaling_server" {
   depends_on   = [module.ecs_service_server]
@@ -275,6 +276,7 @@ module "ecs_autoscaling_client" {
   min_capacity = 1
   max_capacity = 4
 }
+*/
 
 # ------- Creating a SNS topic -------
 module "sns" {
