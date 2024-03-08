@@ -78,3 +78,9 @@ variable "s3_bucket_assets" {
   type        = list(string)
   default     = ["*"]
 }
+
+variable "ssm_parameter_arns" {
+  description = "List of SSM Parameter ARNs that the ECS Task Execution Role needs access to"
+  type        = list(string)
+  default     = []
+}
