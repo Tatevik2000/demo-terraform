@@ -103,18 +103,10 @@ data "aws_iam_policy_document" "role_policy_ecs_task_role" {
     ]
     resources = var.dynamodb_table
   }
-  statement {
-    sid       = "AllowSSMParameterAccess"
-    effect    = "Allow"
-    actions   = [
-      "ssm:GetParameter",
-      "ssm:GetParameters"
-    ]
-    resources = ["*"]
-   }
 }
 
 resource "aws_iam_policy" "ecs_ssm_access_policy" {
+  count       = length(var.ssm_parameter_arns) > 0 ? 1 : 0
   name        = "ecs-ssm-access"
   description = "Policy to allow ECS task execution role to access SSM parameters"
 
