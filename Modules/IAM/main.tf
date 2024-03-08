@@ -115,7 +115,7 @@ data "aws_iam_policy_document" "role_policy_ecs_task_role" {
 }
 
 resource "aws_iam_policy" "ecs_ssm_access_policy" {
-  name        = "${var.app_name}-ecs-ssm-access"
+  name        = "ecs-ssm-access"
   description = "Policy to allow ECS task execution role to access SSM parameters"
 
   policy = jsonencode({
