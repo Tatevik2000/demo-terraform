@@ -135,7 +135,7 @@ resource "aws_iam_policy" "ecs_ssm_access_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "ecs_ssm_access_attachment" {
-  role       = aws_iam_role.ecs_task_execution_role.name
+  role       = aws_iam_role.ecs_task_excecution_role.name
   policy_arn = aws_iam_policy.ecs_ssm_access_policy.arn
 }
 
