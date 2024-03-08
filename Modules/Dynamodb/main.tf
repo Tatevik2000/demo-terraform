@@ -1,10 +1,3 @@
-# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-# SPDX-License-Identifier: MIT-0
-
-/*=======================================
-      Amazon Dynamodb resources
-========================================*/
-
 resource "aws_dynamodb_table" "dynamodb_table" {
   name         = var.name
   billing_mode = "PAY_PER_REQUEST"
