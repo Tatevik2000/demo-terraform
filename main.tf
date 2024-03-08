@@ -119,6 +119,7 @@ module "ecs_role_policy" {
   name          = "ecs-ecr-${var.environment_name}"
   create_policy = true
   attach_to     = module.ecs_role.name_role
+  ssm_parameter_arns = [module.ssm_parameter, module.ssm_parameter_alb]
 }
 
 # ------- Creating client ECR Repository to store Docker Images -------
