@@ -11,7 +11,7 @@ module "vpc" {
   cidr   = ["10.120.0.0/16"]
   name   = var.environment_name
 }
-
+/*
 # ------- Creating Target Group for the server ALB blue environment -------
 module "target_group_server_blue" {
   source              = "./Modules/ALB"
@@ -103,7 +103,7 @@ module "alb_client" {
   security_group = module.security_group_alb_client.sg_id
   target_group   = module.target_group_client_blue.arn_tg
 }
-/*
+
 # ------- ECS Role -------
 module "ecs_role" {
   source             = "./Modules/IAM"
@@ -121,13 +121,13 @@ module "ecs_role_policy" {
   create_policy = true
   attach_to     = module.ecs_role.name_role
 }
-*/
+
 # ------- Creating client ECR Repository to store Docker Images -------
 module "ecr" {
   source = "./Modules/ECR"
   name   = "demo"
 }
-/*
+
 # ------- Creating ECS Task Definition for the server -------
 module "ecs_taks_definition_server" {
   source             = "./Modules/ECS/TaskDefinition"
@@ -169,7 +169,7 @@ module "ecs_taks_definition_client" {
   docker_image_url   = "${module.ecr.ecr_repository_url}:front"
   aws_region         = var.aws_region
 }
-*/
+
 
 # ------- Creating a server Security Group for ECS TASKS -------
 module "security_group_ecs_task_server" {
@@ -195,7 +195,7 @@ module "ecs_cluster" {
   source = "./Modules/ECS/Cluster"
   name   = var.environment_name
 }
-/*
+
 # ------- Creating ECS Service server -------
 module "ecs_service_server" {
   depends_on          = [module.alb_server]
@@ -241,7 +241,6 @@ module "ecs_service_client" {
   container_name      = var.container_name["client"] 
   aws_region          = var.aws_region 
 }
-*/
 
 module "ssm_parameter" {
   source  = "./Modules/SSM"
@@ -256,7 +255,7 @@ module "ssm_parameter_alb" {
   value   =  module.alb_server.dns_alb
   type    = "String" 
 }
-/*
+
 # ------- Creating ECS Autoscaling policies for the server application -------
 module "ecs_autoscaling_server" {
   depends_on   = [module.ecs_service_server]
@@ -276,7 +275,6 @@ module "ecs_autoscaling_client" {
   min_capacity = 1
   max_capacity = 4
 }
-*/
 
 # ------- Creating a SNS topic -------
 module "sns" {
@@ -296,3 +294,4 @@ module "dynamodb_table" {
   source = "./Modules/Dynamodb"
   name   = "assets-table-${var.environment_name}"
 }
+*/
