@@ -11,7 +11,7 @@ module "vpc" {
   cidr   = ["10.120.0.0/16"]
   name   = var.environment_name
 }
-/*
+
 # ------- Creating Target Group for the server ALB blue environment -------
 module "target_group_server_blue" {
   source              = "./Modules/ALB"
@@ -294,4 +294,3 @@ module "dynamodb_table" {
   source = "./Modules/Dynamodb"
   name   = "assets-table-${var.environment_name}"
 }
-*/
