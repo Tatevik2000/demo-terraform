@@ -111,6 +111,7 @@ module "ecs_role" {
   name               = var.iam_role_name["ecs"]
   name_ecs_task_role = var.iam_role_name["ecs_task_role"]
   dynamodb_table     = [module.dynamodb_table.dynamodb_table_arn]
+  ssm_parameter_arns = [module.ssm_parameter.ssm_parameter_arn, module.ssm_parameter_alb.ssm_parameter_arn]
 }
 
 # ------- Creating a IAM Policy for role -------
@@ -119,7 +120,6 @@ module "ecs_role_policy" {
   name          = "ecs-ecr-${var.environment_name}"
   create_policy = true
   attach_to     = module.ecs_role.name_role
-  ssm_parameter_arns = [module.ssm_parameter.ssm_parameter_arn, module.ssm_parameter_alb.ssm_parameter_arn]
 }
 
 # ------- Creating client ECR Repository to store Docker Images -------
