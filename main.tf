@@ -166,7 +166,7 @@ module "ecs_taks_definition_client" {
   container_port     = var.port_app_client
   container_cpu      = "256"  
   container_memory   = "512"    
-  docker_image_url   = "${module.ecr.ecr_repository_url}:front"
+  docker_image_url   = "${module.ecr.ecr_repository_url}:client"
   aws_region         = var.aws_region
 }
 
