@@ -1,6 +1,3 @@
-# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-# SPDX-License-Identifier: MIT-0
-
 variable "name" {
   description = "Provided name used for name concatenation of resources"
   type        = string
