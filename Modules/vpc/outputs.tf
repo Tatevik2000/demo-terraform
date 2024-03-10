@@ -1,6 +1,3 @@
-# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-# SPDX-License-Identifier: MIT-0
-
 output "aws_vpc" {
   value = aws_vpc.aws_vpc.id
 }
