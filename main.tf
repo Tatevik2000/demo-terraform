@@ -231,33 +231,6 @@ module "ssm_parameter_alb" {
   type    = "String" 
 }
 
-# ------- Creating ECS Autoscaling policies for the server application -------
-module "ecs_autoscaling_server" {
-  depends_on   = [module.ecs_service_server]
-  source       = "./Modules/ECS/Autoscaling"
-  name         = "${var.environment_name}-server"
-  cluster_name = module.ecs_cluster.ecs_cluster_name
-  min_capacity = 1
-  max_capacity = 4
-}
-
-# ------- Creating ECS Autoscaling policies for the client application -------
-module "ecs_autoscaling_client" {
-  depends_on   = [module.ecs_service_client]
-  source       = "./Modules/ECS/Autoscaling"
-  name         = "${var.environment_name}-client"
-  cluster_name = module.ecs_cluster.ecs_cluster_name
-  min_capacity = 1
-  max_capacity = 4
-}
-
-# ------- Creating a SNS topic -------
-module "sns" {
-  source   = "./Modules/SNS"
-  sns_name = "sns-${var.environment_name}"
-}
-
-
 # ------- Creating Bucket to store assets accessed by the Back-end -------
 module "s3_assets" {
   source      = "./Modules/S3"
