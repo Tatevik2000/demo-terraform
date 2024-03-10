@@ -1,11 +1,3 @@
-# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-# SPDX-License-Identifier: MIT-0
-
-/*==================================================
-      AWS Networking for the whole solution
-===================================================*/
-
-# ------- VPC Creation -------
 resource "aws_vpc" "aws_vpc" {
   cidr_block           = var.cidr[0]
   instance_tenancy     = "default"
