@@ -7,7 +7,6 @@
    * [Infrastructure](#infrastructure)
       * [Infrastructure Architecture](#infrastructure-architecture)
         * [Infrastructure considerations due to demo proposals](#infrastructure-considerations-due-to-demo-proposals)
-      * [CI/CD Architecture](#ci/cd-architecture)
       * [Prerequisites](#prerequisites)
       * [Usage](#usage)
       * [Autoscaling test](#autoscaling-test)
@@ -46,23 +45,7 @@ The Infrastructure folder contains the terraform code to deploy the AWS resource
 - IAM Roles and policies for ECS Tasks
 - Security Groups for ALBs and ECS tasks
 - 1 DynamoDB table (used by the application)
-- 1 SNS topic for notifications
 
-## Infrastructure Architecture
-
-The following diagram represents the Infrastructure architecture being deployed with this project:
-
-<p align="center">
-  <img src="Documentation_assets/Infrastructure_architecture.png"/>
-</p>
-
- 
-**5.** Review the terraform plan, take a look at the changes that terraform will execute:
-``
-
-**6.** Once Terraform finishes the deployment, open the AWS Management Console and go to the AWS CodePipeline service. You will see that the pipeline, which was created by this Terraform code, is in progress. Add some files and DynamoDB items as mentioned [here](#client-considerations-due-to-demo-proposals). Once the pipeline finished successfully and the before assets were added, go back to the console where Terraform was executed, copy the *application_url* value from the output and open it in a browser.
-
-**7.** In order to access the also implemented Swagger endpoint, copy the *swagger_endpoint* value from the Terraform output and open it in a browser.
 
 ## Application Code
 
