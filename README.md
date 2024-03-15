@@ -20,7 +20,6 @@ The Infrastructure folder contains the terraform code to deploy the AWS resource
 - 1 ECS Cluster
 - 2 ECS Services
 - 2 Task definitions
-- 4 Autoscaling Policies + Cloudwatch Alarms
 - 2 Application Load Balancer (Public facing)
 - IAM Roles and policies for ECS Tasks
 - Security Groups for ALBs and ECS tasks
