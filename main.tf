@@ -2,9 +2,6 @@ resource "random_id" "RANDOM_ID" {
   byte_length = "2"
 }
 
-# ------- Account ID -------
-data "aws_caller_identity" "id_current_account" {}
-
 # ------- vpc -------
 module "vpc" {
   source = "./Modules/vpc"
