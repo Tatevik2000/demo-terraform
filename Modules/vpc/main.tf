@@ -51,6 +51,7 @@ resource "aws_subnet" "private_subnets_server" {
 # ------- Internet Gateway -------
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.aws_vpc.id
+  domain = "vpc"
   tags = {
     Name = "igw_${var.name}"
   }
