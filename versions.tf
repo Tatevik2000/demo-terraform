@@ -1,10 +1,15 @@
 terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "5.33.0"
-    }
+  cloud {
+	organization = “my-tfc-org”
+	workspaces {
+  	name = “test”
+	}
   }
+  required_providers {
+	aws = {
+  	source  = “hashicorp/aws”
+  	version = “5.33.0”
+	}
 }
 
 provider "aws" {
