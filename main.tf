@@ -170,7 +170,6 @@ module "ecs_role" {
   create_ecs_role    = true
   name               = var.iam_role_name["ecs"]
   name_ecs_task_role = var.iam_role_name["ecs_task_role"]
-  dynamodb_table     = [module.dynamodb_table.dynamodb_table_arn]
   ssm_parameter_arns = [module.ssm_parameter_alb.ssm_parameter_arn]
 }
 
