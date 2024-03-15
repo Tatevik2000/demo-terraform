@@ -4,8 +4,4 @@ resource "aws_ssm_parameter" "example" {
   type        = var.type
   value       = var.value
   key_id      = var.type == "SecureString" ? var.key_id : null
-
-  lifecycle {
-    ignore_changes = [value]
-  }
 }
