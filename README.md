@@ -58,36 +58,12 @@ The following diagram represents the Infrastructure architecture being deployed 
 
  
 **5.** Review the terraform plan, take a look at the changes that terraform will execute:
-
-```shell
-terraform apply -var aws_profile="your-profile" -var aws_region="your-region" -var environment_name="your-env" -var github_token="your-personal-token" -var repository_name="your-github-repository" -var repository_owner="the-github-repository-owner"
-```
+``
 
 **6.** Once Terraform finishes the deployment, open the AWS Management Console and go to the AWS CodePipeline service. You will see that the pipeline, which was created by this Terraform code, is in progress. Add some files and DynamoDB items as mentioned [here](#client-considerations-due-to-demo-proposals). Once the pipeline finished successfully and the before assets were added, go back to the console where Terraform was executed, copy the *application_url* value from the output and open it in a browser.
 
 **7.** In order to access the also implemented Swagger endpoint, copy the *swagger_endpoint* value from the Terraform output and open it in a browser.
 
-## Autoscaling test
-
-To test how your application will perform under a peak of traffic, a stress test configuration file is provided.
-
-For this stress test [Artillery](https://artillery.io/) is being used. Please be sure to install it following [these](https://artillery.io/docs/guides/getting-started/installing-artillery.html) steps.
-
-Once installed, please change the ALB DNS to the desired layer to test (front/backend) in the **target** attribute, which you can copy from the generated Terraform output, or you can also search it in the AWS Management Console.
-
-To execute it, run the following commands:
-
-*Frontend layer:*
-```bash
-artillery run Code/client/src/tests/stresstests/stress_client.yml
-```
-
-*Backend layer:*
-```bash
-artillery run Code/server/src/tests/stresstests/stress_server.yml
-```
-
-To learn more about Amazon ECS Autoscaling, please take a look to [this](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-auto-scaling.html) documentation.
 ## Application Code
 
 ### Client app
