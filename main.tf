@@ -190,8 +190,7 @@ module "ecs_service_server" {
   docker_image_url    = module.ecr.ecr_repository_url 
   cpu                 = "256" 
   memory              = "512" 
-  container_name      = var.container_name["server"] 
-  aws_region          = var.aws_region 
+  container_name      = var.container_name["server"]
 }
 
 # ------- Creating ECS Service client -------
@@ -213,8 +212,7 @@ module "ecs_service_client" {
   docker_image_url    = module.ecr.ecr_repository_url
   cpu                 = "256" 
   memory              = "512" 
-  container_name      = var.container_name["client"] 
-  aws_region          = var.aws_region 
+  container_name      = var.container_name["client"]
 }
 
 module "ssm_parameter" {
