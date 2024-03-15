@@ -76,9 +76,4 @@ variable "container_memory" {
 variable "container_port" {  
   description = "The port number on the container bound to the host port"  
   type        = number  
-}  
-  
-variable "aws_region" {  
-  description = "The AWS region where the log group will be created"  
-  type        = string  
-}  
+} 
