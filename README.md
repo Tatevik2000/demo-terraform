@@ -1,24 +1,4 @@
 # Amazon ECS Demo with fullstack app / DevOps practices / Terraform sample
-
-## Table of content
-
-   * [Solution overview](#solution-overview)
-   * [General information](#general-information)
-   * [Infrastructure](#infrastructure)
-      * [Infrastructure Architecture](#infrastructure-architecture)
-        * [Infrastructure considerations due to demo proposals](#infrastructure-considerations-due-to-demo-proposals)
-      * [Prerequisites](#prerequisites)
-      * [Usage](#usage)
-      * [Autoscaling test](#autoscaling-test)
-   * [Application Code](#application-code)
-     * [Client app](#client-app)
-       * [Client considerations due to demo proposal](#client-considerations-due-to-demo-proposals)
-     * [Server app](#server-app)
-   * [Cleanup](#cleanup)
-   * [Security](#security)
-   * [License](#license)
-   
-
 ## Solution overview
 
 This repository contains Terraform code to deploy a solution that is intended to be used to run a demo. It shows how AWS resources can be used to build an architecture that reduces defects while deploying, eases remediation, mitigates deployment risks and improves the flow into production environments while gaining the advantages of a managed underlying infrastructure for containers.
