@@ -142,10 +142,6 @@ module "ecs_taks_definition_server" {
   aws_region         = var.aws_region
   secrets   = [
     {
-      name = module.ssm_parameter.parameter_name,
-      arn  = module.ssm_parameter.ssm_parameter_arn
-    },
-    {
       name = module.ssm_parameter_alb.parameter_name,
       arn  = module.ssm_parameter_alb.ssm_parameter_arn
     }
@@ -175,7 +171,7 @@ module "ecs_role" {
   name               = var.iam_role_name["ecs"]
   name_ecs_task_role = var.iam_role_name["ecs_task_role"]
   dynamodb_table     = [module.dynamodb_table.dynamodb_table_arn]
-  ssm_parameter_arns = [module.ssm_parameter.ssm_parameter_arn, module.ssm_parameter_alb.ssm_parameter_arn]
+  ssm_parameter_arns = [module.ssm_parameter_alb.ssm_parameter_arn]
 }
 
 # ------- Creating a server Security Group for ECS TASKS -------
