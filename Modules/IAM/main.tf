@@ -78,20 +78,7 @@ data "aws_iam_policy_document" "role_policy_ecs_task_role" {
       "iam:PassRole"  
     ]  
     resources = ["*"]  
-  }  
-  statement {  
-    sid       = "AllowDynamodbActions"  
-    effect    = "Allow"  
-    actions   = [  
-      "dynamodb:BatchGetItem",
-      "dynamodb:Describe*",
-      "dynamodb:List*",
-      "dynamodb:GetItem",
-      "dynamodb:Query",
-      "dynamodb:Scan",
-    ]
-    resources = var.dynamodb_table
-  }
+  } 
 }
 
 resource "aws_iam_policy" "ecs_ssm_access_policy" {
