@@ -8,6 +8,25 @@ module "vpc" {
   cidr   = ["10.120.0.0/16"]
   name   = var.environment_name
 }
+# ------- Creating Server Application ALB -------
+module "alb_server" {
+  source         = "./Modules/ALB"
+  create_alb     = true
+  name           = "${var.environment_name}-ser"
+  subnets        = [module.vpc.public_subnets[0], module.vpc.public_subnets[1]]
+  security_group = module.security_group_alb_server.sg_id
+  target_group   = module.target_group_server.arn_tg
+}
+
+# ------- Creating Client Application ALB -------
+module "alb_client" {
+  source         = "./Modules/ALB"
+  create_alb     = true
+  name           = "${var.environment_name}-cli"
+  subnets        = [module.vpc.public_subnets[0], module.vpc.public_subnets[1]]
+  security_group = module.security_group_alb_client.sg_id
+  target_group   = module.target_group_client.arn_tg
+}
 
 # ------- Creating Target Group for the server ALB environment -------
 module "target_group_server" {
@@ -54,112 +73,6 @@ module "security_group_alb_client" {
   vpc_id              = module.vpc.aws_vpc
   cidr_blocks_ingress = ["0.0.0.0/0"]
   ingress_port        = 80
-}
-
-# ------- Creating Server Application ALB -------
-module "alb_server" {
-  source         = "./Modules/ALB"
-  create_alb     = true
-  name           = "${var.environment_name}-ser"
-  subnets        = [module.vpc.public_subnets[0], module.vpc.public_subnets[1]]
-  security_group = module.security_group_alb_server.sg_id
-  target_group   = module.target_group_server.arn_tg
-}
-
-# ------- Creating Client Application ALB -------
-module "alb_client" {
-  source         = "./Modules/ALB"
-  create_alb     = true
-  name           = "${var.environment_name}-cli"
-  subnets        = [module.vpc.public_subnets[0], module.vpc.public_subnets[1]]
-  security_group = module.security_group_alb_client.sg_id
-  target_group   = module.target_group_client.arn_tg
-}
-
-# ------- ECS Role -------
-module "ecs_role" {
-  source             = "./Modules/IAM"
-  create_ecs_role    = true
-  name               = var.iam_role_name["ecs"]
-  name_ecs_task_role = var.iam_role_name["ecs_task_role"]
-  dynamodb_table     = [module.dynamodb_table.dynamodb_table_arn]
-  ssm_parameter_arns = [module.ssm_parameter.ssm_parameter_arn, module.ssm_parameter_alb.ssm_parameter_arn]
-}
-
-# ------- Creating a IAM Policy for role -------
-module "ecs_role_policy" {
-  source        = "./Modules/IAM"
-  name          = "ecs-ecr-${var.environment_name}"
-  create_policy = true
-  attach_to     = module.ecs_role.name_role
-}
-
-# ------- Creating client ECR Repository to store Docker Images -------
-module "ecr" {
-  source = "./Modules/ECR"
-  name   = "demo"
-}
-
-# ------- Creating ECS Task Definition for the server -------
-module "ecs_taks_definition_server" {
-  source             = "./Modules/ECS/TaskDefinition"
-  name               = "${var.environment_name}-server"
-  container_name     = var.container_name["server"]
-  execution_role_arn = module.ecs_role.arn_role
-  task_role_arn      = module.ecs_role.arn_role_ecs_task_role
-  cpu                = 256
-  memory             = "512"
-  container_port     = var.port_app_server
-  container_cpu      = "256"  
-  container_memory   = "512"    
-  docker_image_url   = "${module.ecr.ecr_repository_url}:back"
-  aws_region         = var.aws_region
-  secrets   = [
-    {
-      name = module.ssm_parameter.parameter_name,
-      arn  = module.ssm_parameter.ssm_parameter_arn
-    },
-    {
-      name = module.ssm_parameter_alb.parameter_name,
-      arn  = module.ssm_parameter_alb.ssm_parameter_arn
-    }
-]
-}
-
-# ------- Creating ECS Task Definition for the client -------
-module "ecs_taks_definition_client" {
-  source             = "./Modules/ECS/TaskDefinition"
-  name               = "${var.environment_name}-client"
-  container_name     = var.container_name["client"]
-  execution_role_arn = module.ecs_role.arn_role
-  task_role_arn      = module.ecs_role.arn_role_ecs_task_role
-  cpu                = 256
-  memory             = "512"
-  container_port     = var.port_app_client
-  container_cpu      = "256"  
-  container_memory   = "512"    
-  docker_image_url   = "${module.ecr.ecr_repository_url}:client"
-  aws_region         = var.aws_region
-}
-
-
-# ------- Creating a server Security Group for ECS TASKS -------
-module "security_group_ecs_task_server" {
-  source          = "./Modules/SecurityGroup"
-  name            = "ecs-task-${var.environment_name}-server"
-  description     = "Controls access to the server ECS task"
-  vpc_id          = module.vpc.aws_vpc
-  ingress_port    = var.port_app_server
-  security_groups = [module.security_group_alb_server.sg_id]
-}
-# ------- Creating a client Security Group for ECS TASKS -------
-module "security_group_ecs_task_client" {
-  source          = "./Modules/SecurityGroup"
-  name            = "ecs-task-${var.environment_name}-client"
-  description     = "Controls access to the client ECS task"
-  vpc_id          = module.vpc.aws_vpc
-  ingress_port    = var.port_app_client
-  security_groups = [module.security_group_alb_client.sg_id]
 }
 
 # ------- Creating ECS Cluster -------
@@ -210,6 +123,85 @@ module "ecs_service_client" {
   cpu                 = "256" 
   memory              = "512" 
   container_name      = var.container_name["client"]
+}
+
+
+# ------- Creating ECS Task Definition for the server -------
+module "ecs_taks_definition_server" {
+  source             = "./Modules/ECS/TaskDefinition"
+  name               = "${var.environment_name}-server"
+  container_name     = var.container_name["server"]
+  execution_role_arn = module.ecs_role.arn_role
+  task_role_arn      = module.ecs_role.arn_role_ecs_task_role
+  cpu                = 256
+  memory             = "512"
+  container_port     = var.port_app_server
+  container_cpu      = "256"  
+  container_memory   = "512"    
+  docker_image_url   = "${module.ecr.ecr_repository_url}:back"
+  aws_region         = var.aws_region
+  secrets   = [
+    {
+      name = module.ssm_parameter.parameter_name,
+      arn  = module.ssm_parameter.ssm_parameter_arn
+    },
+    {
+      name = module.ssm_parameter_alb.parameter_name,
+      arn  = module.ssm_parameter_alb.ssm_parameter_arn
+    }
+]
+}
+
+# ------- Creating ECS Task Definition for the client -------
+module "ecs_taks_definition_client" {
+  source             = "./Modules/ECS/TaskDefinition"
+  name               = "${var.environment_name}-client"
+  container_name     = var.container_name["client"]
+  execution_role_arn = module.ecs_role.arn_role
+  task_role_arn      = module.ecs_role.arn_role_ecs_task_role
+  cpu                = 256
+  memory             = "512"
+  container_port     = var.port_app_client
+  container_cpu      = "256"  
+  container_memory   = "512"    
+  docker_image_url   = "${module.ecr.ecr_repository_url}:client"
+  aws_region         = var.aws_region
+}
+
+# ------- ECS Role -------
+module "ecs_role" {
+  source             = "./Modules/IAM"
+  create_ecs_role    = true
+  name               = var.iam_role_name["ecs"]
+  name_ecs_task_role = var.iam_role_name["ecs_task_role"]
+  dynamodb_table     = [module.dynamodb_table.dynamodb_table_arn]
+  ssm_parameter_arns = [module.ssm_parameter.ssm_parameter_arn, module.ssm_parameter_alb.ssm_parameter_arn]
+}
+
+# ------- Creating a server Security Group for ECS TASKS -------
+module "security_group_ecs_task_server" {
+  source          = "./Modules/SecurityGroup"
+  name            = "ecs-task-${var.environment_name}-server"
+  description     = "Controls access to the server ECS task"
+  vpc_id          = module.vpc.aws_vpc
+  ingress_port    = var.port_app_server
+  security_groups = [module.security_group_alb_server.sg_id]
+}
+
+# ------- Creating a client Security Group for ECS TASKS -------
+module "security_group_ecs_task_client" {
+  source          = "./Modules/SecurityGroup"
+  name            = "ecs-task-${var.environment_name}-client"
+  description     = "Controls access to the client ECS task"
+  vpc_id          = module.vpc.aws_vpc
+  ingress_port    = var.port_app_client
+  security_groups = [module.security_group_alb_client.sg_id]
+}
+
+# ------- Creating client ECR Repository to store Docker Images -------
+module "ecr" {
+  source = "./Modules/ECR"
+  name   = "demo"
 }
 
 module "ssm_parameter" {
