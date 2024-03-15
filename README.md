@@ -25,6 +25,7 @@ The Infrastructure folder contains the terraform code to deploy the AWS resource
 - IAM Roles and policies for ECS Tasks
 - Security Groups for ALBs and ECS tasks
 - 1 DynamoDB table (used by the application)
+- 2 S3 Buckets (used to store assets accessible from within the application)
 
 
 ## Application Code
