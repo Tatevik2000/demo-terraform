@@ -204,22 +204,9 @@ module "ecr" {
   name   = "demo"
 }
 
-module "ssm_parameter" {
-  source  = "./Modules/SSM"
-  name    = "DYNAMODB_TABLE"
-  value   = "assets-table-demo"
-  type    = "String" 
-}
-
 module "ssm_parameter_alb" {
   source  = "./Modules/SSM"
   name    = "LOAD_BALANCER_URL"
   value   =  module.alb_server.dns_alb
   type    = "String" 
-}
-
-# ------- Creating Dynamodb table by the Back-end -------
-module "dynamodb_table" {
-  source = "./Modules/Dynamodb"
-  name   = "assets-table-${var.environment_name}"
 }
