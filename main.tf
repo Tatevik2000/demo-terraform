@@ -231,12 +231,6 @@ module "ssm_parameter_alb" {
   type    = "String" 
 }
 
-# ------- Creating Bucket to store assets accessed by the Back-end -------
-module "s3_assets" {
-  source      = "./Modules/S3"
-  bucket_name = "assets-${var.aws_region}-${random_id.RANDOM_ID.hex}"
-}
-
 # ------- Creating Dynamodb table by the Back-end -------
 module "dynamodb_table" {
   source = "./Modules/Dynamodb"
