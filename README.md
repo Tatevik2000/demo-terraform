@@ -43,12 +43,8 @@ The Infrastructure folder contains the terraform code to deploy the AWS resource
 - 2 Task definitions
 - 4 Autoscaling Policies + Cloudwatch Alarms
 - 2 Application Load Balancer (Public facing)
-- IAM Roles and policies for ECS Tasks, CodeBuild, CodeDeploy and CodePipeline
+- IAM Roles and policies for ECS Tasks
 - Security Groups for ALBs and ECS tasks
-- 2 CodeBuild Projects
-- 2 CodeDeploy Applications
-- 1 CodePipeline pipeline
-- 2 S3 Buckets (1 used by CodePipeline to store the artifacts and another one used to store assets accessible from within the application)
 - 1 DynamoDB table (used by the application)
 - 1 SNS topic for notifications
 
