@@ -12,8 +12,8 @@ module "vpc" {
   name   = var.environment_name
 }
 
-# ------- Creating Target Group for the server ALB blue environment -------
-module "target_group_server_blue" {
+# ------- Creating Target Group for the server ALB environment -------
+module "target_group_server" {
   source              = "./Modules/ALB"
   create_target_group = true
   name                = "tg-${var.environment_name}-s-b"
@@ -26,8 +26,8 @@ module "target_group_server_blue" {
 }
 
 
-# ------- Creating Target Group for the client ALB blue environment -------
-module "target_group_client_blue" {
+# ------- Creating Target Group for the client ALB environment -------
+module "target_group_client" {
   source              = "./Modules/ALB"
   create_target_group = true
   name                = "tg-${var.environment_name}-c-b"
@@ -66,7 +66,7 @@ module "alb_server" {
   name           = "${var.environment_name}-ser"
   subnets        = [module.vpc.public_subnets[0], module.vpc.public_subnets[1]]
   security_group = module.security_group_alb_server.sg_id
-  target_group   = module.target_group_server_blue.arn_tg
+  target_group   = module.target_group_server.arn_tg
 }
 
 # ------- Creating Client Application ALB -------
@@ -76,7 +76,7 @@ module "alb_client" {
   name           = "${var.environment_name}-cli"
   subnets        = [module.vpc.public_subnets[0], module.vpc.public_subnets[1]]
   security_group = module.security_group_alb_client.sg_id
-  target_group   = module.target_group_client_blue.arn_tg
+  target_group   = module.target_group_client.arn_tg
 }
 
 # ------- ECS Role -------
@@ -180,7 +180,7 @@ module "ecs_service_server" {
   arn_task_definition = module.ecs_taks_definition_server.arn_task_definition  
   security_group_ids  = [module.security_group_ecs_task_server.sg_id] 
   subnet_ids          = [module.vpc.private_subnets_server[0], module.vpc.private_subnets_server[1]]
-  target_group_arn    = module.target_group_server_blue.arn_tg
+  target_group_arn    = module.target_group_server.arn_tg
   desired_tasks       = 2
   container_port      = var.port_app_server
   container_memory    = "512"
@@ -202,7 +202,7 @@ module "ecs_service_client" {
   arn_task_definition = module.ecs_taks_definition_client.arn_task_definition
   security_group_ids  = [module.security_group_ecs_task_client.sg_id]
   subnet_ids          = [module.vpc.private_subnets_client[0], module.vpc.private_subnets_client[1]]
-  target_group_arn    = module.target_group_client_blue.arn_tg
+  target_group_arn    = module.target_group_client.arn_tg
   desired_tasks       = 2
   container_port      = var.port_app_client
   container_memory    = "512"
