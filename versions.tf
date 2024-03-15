@@ -1,15 +1,16 @@
 terraform {
   cloud {
-	organization = “test-for-pre”
-	workspaces {
-  	name = “test”
-	}
+    organization = "test-for-pre"
+    workspaces {
+      name = "test"
+    }
   }
   required_providers {
-	aws = {
-  	source  = “hashicorp/aws”
-  	version = “5.33.0”
-	}
+    aws = {
+      source  = "hashicorp/aws"
+      version = "5.33.0"
+    }
+  }
 }
 
 provider "aws" {
@@ -20,3 +21,4 @@ provider "aws" {
 provider "aws" {
   region = var.aws_region
 }
+
