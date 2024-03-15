@@ -20,10 +20,6 @@ resource "aws_alb_listener" "https_listener" {
     target_group_arn = var.target_group
     type             = "forward"
   }
-
-  lifecycle {
-    ignore_changes = [default_action]
-  }
 }
 
 # ------- ALB Listener for HTTP -------
@@ -38,9 +34,6 @@ resource "aws_alb_listener" "http_listener" {
     type             = "forward"
   }
 
-  lifecycle {
-    ignore_changes = [default_action]
-  }
 }
 
 # ------- Target Groups for ALB -------
